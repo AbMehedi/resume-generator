@@ -1,0 +1,7 @@
+.button {
+   // -fx-border-color: #000000;  /* Set the border color */
+    -fx-border-width: 2px;      /* Set the border thickness */
+    -fx-border-radius: 10px;    /* Set rounded corners */
+    -fx-background-color: #d6caca; /* Optional: make background white */
+    -fx-text-fill: #000000;      /* Optional: make text color match border */
+}
