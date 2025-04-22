@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Text?>
 
-<fx:root prefHeight="400.0" prefWidth="600.0" type="AnchorPane" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.resumgen.SignUpController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.resumegen.LoginController">
    <children>
       <BorderPane prefHeight="400.0" prefWidth="213.0" />
       <Text layoutX="299.0" layoutY="88.0" strokeType="OUTSIDE" strokeWidth="0.0" text="User Name" />
@@ -21,4 +21,4 @@
       <Text layoutX="299.0" layoutY="217.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Confirm Password" />
       <TextField layoutX="403.0" layoutY="200.0" />
    </children>
-</fx:root>
+</AnchorPane>
