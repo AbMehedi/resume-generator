@@ -112,17 +112,17 @@ public class LoginController {
             }
             //check if login is successfull
             if (found){
-                label.setText("Login Successful"+username);
+                label.setText("Login Successful "+username);
             } else {
                 label.setText("Login Failed");
             }
 
         }catch(FileNotFoundException e){
-
+            label.setText("Login Failed please sign up");
         }
     }
 
-
+    //scene change
     public void SignupbuttonHandler(ActionEvent event) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("sign_up_view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
