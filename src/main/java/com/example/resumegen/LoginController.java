@@ -46,89 +46,123 @@ public class LoginController {
         label.setVisible(false);
     }
 
-    public void LoginHandler() {
-//
-//        if (getUsername().equals("admin") && getPassword().equals("admin")) {
-//            label.setText("Welcome Admin");
-//        }
+    boolean found=false;
+
+    public void LoginHandler(ActionEvent event) throws IOException {
 
         try{
-            LoginCheck();
+           if( LoginCheck()){
+               FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("dashboard.fxml"));
+               Scene scene = new Scene(fxmlLoader.load());
+
+               // Get the current stage (window) from the event
+               Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+               stage.setTitle("Login page");
+               stage.setScene(scene);
+               stage.show();
+           }
+
         }catch (Exception e){
-            label.setText("Login Failed ");
+            label.setText("Login Failed 1 ");
             label.setVisible(true);
+            e.printStackTrace();
         }
 
+//
+//        else{
+//            label.setText("Wrong Username/Password");
+//            label.setVisible(true);
+
+       // }
+       // System.out.println(LoginCheck());
     }
 
-    public void LoginCheck() {
-        boolean found = false;
+    public boolean LoginCheck() {
         String username = getUsername();
-        //System.out.println(username);
         String password = getPassword();
-        try{
-            File userFile = new File(username+".txt");
-            if(!userFile.exists()) {
+
+
+        try {
+            File userFile = new File(username + ".txt");
+
+            // If the file doesn't exist, search all .txt files
+            if (!userFile.exists()) {
                 File dir = new File(".");
                 File[] files = dir.listFiles((directory, name) -> name.endsWith(".txt"));
+
                 if (files != null) {
                     for (File file : files) {
-                        Scanner filescanner = new Scanner(file);
+                        try (Scanner filescanner = new Scanner(file)) {
+                            while (filescanner.hasNextLine()) {
+                                String line = filescanner.nextLine();
+                                String[] parts = line.split(",");
 
-                        while (filescanner.hasNextLine()) {
-                            String line = filescanner.nextLine();
-                            String[] parts = line.split(",");
+                                if (parts.length >= 3) {
+                                    String StoredUsername = parts[0].trim();
+                                    String StoredPassword = parts[1].trim();
+                                    String StoredMail = parts[2].trim();
 
-                            if (parts.length >= 3) {
-                                String StoredUsername = parts[0];
-                                String StoredPassword = parts[1];
-                                String StoredMail = parts[2];
-                                System.out.println(StoredMail);
-
-                                if (username.equals(StoredMail) && password.equals(StoredPassword)) {
-                                     found = true;
-                                    break;
+                                    if (username.equals(StoredMail) && password.equals(StoredPassword)) {
+                                        found = true;
+                                        break;
+                                    }
                                 }
+                            }
+                        }
+                        if (found) break;
+                    }
+                }
+            } else {
+                try (Scanner sc = new Scanner(userFile)) {
+                    while (sc.hasNextLine()) {
+                        String line = sc.nextLine();
+                        String[] parts = line.split(",");
+
+                        if (parts.length >= 3) {
+                            String StoredUsername = parts[0].trim();
+                            String StoredPassword = parts[1].trim();
+                            String StoredMail = parts[2].trim();
+
+                            if (username.equals(StoredUsername) && password.equals(StoredPassword)) {
+                                found = true;
+                                break;
                             }
                         }
                     }
                 }
-
             }
-            Scanner sc = new Scanner(userFile);
-            found = false;
-            while(sc.hasNextLine()){
-                String line = sc.nextLine();
-                String[] parts = line.split(",");
 
-                if(parts.length>=3){
-                    String StoredUsername = parts[0];
-                    String StoredPassword = parts[1];
-                    String StoredMail = parts[2];
-                    System.out.println(StoredMail);
-
-                    if(username.equals(StoredUsername) && password.equals(StoredPassword)){
-                        found = true;
-                        break;
-                    }
-
-                }
-
-            }
-            //check if login is successfull
-            if (found){
-                label.setText("Login Successful "+username);
+            if (found) {
+                label.setText("Login Successful " + username);
                 label.setVisible(true);
+                return true;
+
             } else {
-                label.setText("Login Failed");
+
+                label.setText("Login Failed 2");
                 label.setVisible(true);
+                return false;
+
             }
 
-        }catch(FileNotFoundException e){
-            label.setText("Login Failed");
+        } catch (FileNotFoundException e) {
+            label.setText("Login Failed 3");
             label.setVisible(true);
+            return false;
+
         }
     }
+//    public void loginbuttonHandler(ActionEvent event) throws IOException {
+//        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("DashBoard.fxml"));
+//        Scene scene = new Scene(fxmlLoader.load());
+//
+//        // Get the current stage (window) from the event
+//        Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+//        stage.setTitle("Sign Up Page");
+//        stage.setScene(scene);
+//        stage.show();
+//    }
+
 
     //scene change
     public void SignupbuttonHandler(ActionEvent event) throws IOException {
