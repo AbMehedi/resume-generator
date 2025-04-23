@@ -16,10 +16,10 @@ public class DashboardController {
     @FXML
     private Button createResumeButton;
     @FXML
-    private void backToLogin(ActionEvent event) throws IOException {
+    public void backToLogin(ActionEvent event) throws IOException {
 
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("main_view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
+        FXMLLoader fxmlLoader3 = new FXMLLoader(Main.class.getResource("main_view.fxml"));
+        Scene scene = new Scene(fxmlLoader3.load());
 
         // Get the current stage (window) from the event
         Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
@@ -35,7 +35,7 @@ public class DashboardController {
 
         // Get the current stage (window) from the event
         Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-        stage.setTitle("Login page");
+        stage.setTitle("Personal Information");
         stage.setScene(scene);
         stage.show();
     }

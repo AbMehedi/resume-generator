@@ -6,8 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.resumegen.Personal_InfoController">
    <children>
       <Label layoutX="45.0" layoutY="51.0" text="Personal Information" underline="true">
          <font>
@@ -26,6 +25,7 @@
       <Label layoutX="45.0" layoutY="237.0" text="Phone " />
       <Label layoutX="347.0" layoutY="237.0" text="Nationality" />
       <Label layoutX="45.0" layoutY="306.0" text="Address" />
-      <Button layoutX="274.0" layoutY="352.0" mnemonicParsing="false" text="Save &amp; Continue" />
+      <Button fx:id="SaveAndContinue" layoutX="464.0" layoutY="352.0" mnemonicParsing="false" onAction="#saveAndContinue" text="Save &amp; Continue" />
+      <Button fx:id="Back" layoutX="46.0" layoutY="352.0" mnemonicParsing="false" onAction="#backToDashBoard" text="Back" />
    </children>
 </AnchorPane>

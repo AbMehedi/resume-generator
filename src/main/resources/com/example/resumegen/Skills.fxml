@@ -6,8 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.resumegen.SkillsController">
    <children>
       <Label layoutX="35.0" layoutY="32.0" text="Skills" underline="true">
          <font>
@@ -22,6 +21,7 @@
       <TextField layoutX="106.0" layoutY="154.0" prefHeight="26.0" prefWidth="338.0" />
       <TextField layoutX="106.0" layoutY="215.0" prefHeight="26.0" prefWidth="338.0" />
       <TextField layoutX="107.0" layoutY="276.0" prefHeight="26.0" prefWidth="338.0" />
-      <Button layoutX="274.0" layoutY="342.0" mnemonicParsing="false" text="Save &amp; Continue" />
+      <Button fx:id="SaveAndContinue" layoutX="445.0" layoutY="348.0" mnemonicParsing="false" onAction="#Experience" text="Save &amp; Continue" />
+      <Button fx:id="Back" layoutX="40.0" layoutY="348.0" mnemonicParsing="false" onAction="#backToEducationPage" text="Back" />
    </children>
 </AnchorPane>
