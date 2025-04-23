@@ -1,10 +1,14 @@
 package com.example.resumegen;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 import java.io.*;
 
@@ -96,6 +100,17 @@ public class SignUpController {
             label.setVisible(true);
         }
 
+    }
+
+    public void backToLoginPage(ActionEvent event) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("main_view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+
+        // Get the current stage (window) from the event
+        Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+        stage.setTitle("Login page");
+        stage.setScene(scene);
+        stage.show();
     }
 }
 

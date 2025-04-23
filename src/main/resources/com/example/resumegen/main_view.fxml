@@ -64,7 +64,7 @@
             <Font size="14.0" />
          </font>
       </Text>
-      <Label fx:id="label" layoutX="416.0" layoutY="335.0" text="Label" />
+      <Label fx:id="label" layoutX="416.0" layoutY="335.0" text="Label" textFill="#e70202" />
       <Button fx:id="button" layoutX="404.0" layoutY="392.0" mnemonicParsing="false" onAction="#SignupbuttonHandler" text="Click Here" />
       <PasswordField fx:id="Password" layoutX="329.0" layoutY="203.0" prefHeight="36.0" prefWidth="232.0" promptText="Enter Password" />
    </children>

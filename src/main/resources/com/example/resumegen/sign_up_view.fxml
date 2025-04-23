@@ -18,7 +18,7 @@
       <TextField fx:id="Username" layoutX="403.0" layoutY="71.0" promptText="Username" />
       <TextField fx:id="Email" layoutX="402.0" layoutY="112.0" promptText="example@domain.com" />
       <Button fx:id="SignUp" layoutX="448.0" layoutY="238.0" mnemonicParsing="false" onAction="#handleSignUp" text="Sign Up" />
-      <Button fx:id="Login" layoutX="459.0" layoutY="328.0" mnemonicParsing="false" text="Log in" />
+      <Button fx:id="Login" layoutX="459.0" layoutY="328.0" mnemonicParsing="false" onAction="#backToLoginPage" text="Log in" />
       <Text layoutX="299.0" layoutY="217.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Confirm Password" />
       <Label fx:id="label" layoutX="395.0" layoutY="285.0" text="*Please fill all the required fields" textFill="RED" />
       <PasswordField fx:id="Password" layoutX="405.0" layoutY="152.0" promptText="Password" />

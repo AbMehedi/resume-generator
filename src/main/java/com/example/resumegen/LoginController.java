@@ -42,6 +42,10 @@ public class LoginController {
 
     }
 
+    public void initialize() {
+        label.setVisible(false);
+    }
+
     public void LoginHandler() {
 //
 //        if (getUsername().equals("admin") && getPassword().equals("admin")) {
@@ -51,7 +55,8 @@ public class LoginController {
         try{
             LoginCheck();
         }catch (Exception e){
-            label.setText("Login Failed");
+            label.setText("Login Failed ");
+            label.setVisible(true);
         }
 
     }
@@ -113,12 +118,15 @@ public class LoginController {
             //check if login is successfull
             if (found){
                 label.setText("Login Successful "+username);
+                label.setVisible(true);
             } else {
                 label.setText("Login Failed");
+                label.setVisible(true);
             }
 
         }catch(FileNotFoundException e){
-            label.setText("Login Failed please sign up");
+            label.setText("Login Failed");
+            label.setVisible(true);
         }
     }
 
