@@ -36,7 +36,7 @@
             <Font name="Pristina" size="16.0" />
          </font>
       </Text>
-      <TextField fx:id="Username" layoutX="330.0" layoutY="154.0" prefHeight="36.0" prefWidth="232.0" promptText="Enter Username">
+      <TextField fx:id="Username" layoutX="330.0" layoutY="154.0" prefHeight="36.0" prefWidth="232.0" promptText="Enter Username or Email address">
          <effect>
             <Glow level="0.0" />
          </effect>
