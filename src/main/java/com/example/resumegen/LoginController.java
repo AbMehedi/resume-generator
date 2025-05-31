@@ -52,12 +52,17 @@ public class LoginController {
 
         try{
            if( LoginCheck()){
+
+
                FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("dashboard.fxml"));
                Scene scene = new Scene(fxmlLoader.load());
 
-               // Get the current stage (window) from the event
+               DashboardController dashboardController = fxmlLoader.getController();
+               dashboardController.setUsername(getUsername());
+
+
                Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-               stage.setTitle("Login page");
+               stage.setTitle("Dashboard page");
                stage.setScene(scene);
                stage.show();
            }

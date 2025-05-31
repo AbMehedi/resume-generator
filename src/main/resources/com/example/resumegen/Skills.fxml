@@ -17,10 +17,10 @@
       <Label layoutX="50.0" layoutY="158.0" text="Skill 2" />
       <Label layoutX="50.0" layoutY="219.0" text="Skill 3" />
       <Label layoutX="50.0" layoutY="280.0" text="Skill 4" />
-      <TextField layoutX="105.0" layoutY="90.0" prefHeight="26.0" prefWidth="338.0" />
-      <TextField layoutX="106.0" layoutY="154.0" prefHeight="26.0" prefWidth="338.0" />
-      <TextField layoutX="106.0" layoutY="215.0" prefHeight="26.0" prefWidth="338.0" />
-      <TextField layoutX="107.0" layoutY="276.0" prefHeight="26.0" prefWidth="338.0" />
+      <TextField fx:id="Skill1" layoutX="105.0" layoutY="90.0" prefHeight="26.0" prefWidth="338.0" />
+      <TextField fx:id="Skill2" layoutX="106.0" layoutY="154.0" prefHeight="26.0" prefWidth="338.0" />
+      <TextField fx:id="Skill3" layoutX="106.0" layoutY="215.0" prefHeight="26.0" prefWidth="338.0" />
+      <TextField fx:id="Skill4" layoutX="107.0" layoutY="276.0" prefHeight="26.0" prefWidth="338.0" />
       <Button fx:id="SaveAndContinue" layoutX="445.0" layoutY="348.0" mnemonicParsing="false" onAction="#Experience" text="Save &amp; Continue" />
       <Button fx:id="Back" layoutX="40.0" layoutY="348.0" mnemonicParsing="false" onAction="#backToEducationPage" text="Back" />
    </children>

@@ -18,19 +18,19 @@
       <Label layoutX="282.0" layoutY="145.0" prefHeight="18.0" prefWidth="66.0" text="Passing Year" />
       <Label layoutX="465.0" layoutY="145.0" text="CGPA" />
       <Label layoutX="45.0" layoutY="76.0" text="1." />
-      <TextField layoutX="200.0" layoutY="105.0" prefHeight="26.0" prefWidth="370.0" />
-      <TextField layoutX="148.0" layoutY="141.0" prefHeight="26.0" prefWidth="125.0" />
-      <TextField layoutX="356.0" layoutY="140.0" prefHeight="26.0" prefWidth="88.0" />
-      <TextField layoutX="504.0" layoutY="140.0" prefHeight="26.0" prefWidth="66.0" />
+      <TextField fx:id="CollegeName" layoutX="200.0" layoutY="105.0" prefHeight="26.0" prefWidth="370.0" />
+      <TextField fx:id="College_Degree" layoutX="148.0" layoutY="141.0" prefHeight="26.0" prefWidth="125.0" />
+      <TextField fx:id="College_PassingYear" layoutX="356.0" layoutY="140.0" prefHeight="26.0" prefWidth="88.0" />
+      <TextField fx:id="College_CGPA" layoutX="504.0" layoutY="140.0" prefHeight="26.0" prefWidth="66.0" />
       <Label layoutX="45.0" layoutY="211.0" text="2." />
       <Label layoutX="45.0" layoutY="250.0" text="College/ University Name" />
       <Label layoutX="45.0" layoutY="293.0" text="Name of Degree" />
       <Label layoutX="286.0" layoutY="293.0" text=" Passing Year" />
       <Label layoutX="466.0" layoutY="293.0" text="CGPA" />
-      <TextField layoutX="199.0" layoutY="246.0" prefHeight="26.0" prefWidth="370.0" />
-      <TextField layoutX="148.0" layoutY="289.0" prefHeight="26.0" prefWidth="126.0" />
-      <TextField layoutX="504.0" layoutY="288.0" prefHeight="26.0" prefWidth="66.0" />
-      <TextField layoutX="360.0" layoutY="289.0" prefHeight="26.0" prefWidth="88.0" />
+      <TextField fx:id="University_Name" layoutX="199.0" layoutY="246.0" prefHeight="26.0" prefWidth="370.0" />
+      <TextField fx:id="University_Degree" layoutX="148.0" layoutY="289.0" prefHeight="26.0" prefWidth="126.0" />
+      <TextField fx:id="University_CGPA" layoutX="504.0" layoutY="288.0" prefHeight="26.0" prefWidth="66.0" />
+      <TextField fx:id="University_PassingYear" layoutX="360.0" layoutY="289.0" prefHeight="26.0" prefWidth="88.0" />
       <Button fx:id="Back" layoutX="45.0" layoutY="340.0" mnemonicParsing="false" onAction="#backToPersonalInfo" text="Back" />
       <Button fx:id="SaveAndContinue" layoutX="455.0" layoutY="340.0" mnemonicParsing="false" onAction="#SkillPage" text="Save And Continue" />
    </children>
