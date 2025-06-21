@@ -30,11 +30,12 @@ public class SkillsController {
     @FXML
     private Button Back;
 
-    public void setUsername (String username){
+    // ✅ Correct setter (required by ExperienceController)
+    public void setUsername(String username) {
         this.username = username;
     }
 
-    public void saveSkill(){
+    public void saveSkill() {
         String skill1 = Skill1.getText();
         String skill2 = Skill2.getText();
         String skill3 = Skill3.getText();
@@ -42,49 +43,49 @@ public class SkillsController {
 
         File file = new File(username + ".txt");
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file,true))){
-            writer.write("Skill 1 : " +skill1);
-
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
+            writer.write("Skills");
             writer.newLine();
-            writer.write(("Skill 2 : " +skill2));
+            writer.write("Skill 1 : " + skill1);
             writer.newLine();
-            writer.write(("Skill 3 : " +skill3));
+            writer.write("Skill 2 : " + skill2);
             writer.newLine();
-            writer.write(("Skill 4 : " +skill4));
+            writer.write("Skill 3 : " + skill3);
             writer.newLine();
-            writer.flush();
-
-        }catch(IOException e){
+            writer.write("Skill 4 : " + skill4);
+            writer.newLine();
+            writer.write("-----------------------------------------------------");
+            writer.newLine();
+        } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     public void backToEducationPage(ActionEvent event) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Education.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
 
-        FXMLLoader fxmlLoader3 = new FXMLLoader(Main.class.getResource("Education.fxml"));
-        Scene scene = new Scene(fxmlLoader3.load());
+        EducationController controller = fxmlLoader.getController();
+        controller.setUsername(username); // Pass username back
 
-        // Get the current stage (window) from the event
         Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-        stage.setTitle("Login page");
+        stage.setTitle("Education");
         stage.setScene(scene);
         stage.show();
-
     }
 
+    // ✅ This method is called when you click "Save & Continue" on Skills.fxml
     public void Experience(ActionEvent event) throws IOException {
-
         saveSkill();
+
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Experience.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
 
-        ExperienceController controller = (ExperienceController) fxmlLoader.getController();
-        controller.getusername(username);
+        ExperienceController controller = fxmlLoader.getController();
+        controller.getusername(username); // Passing username to ExperienceController
 
-        // Get the current stage (window) from the event
         Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-        stage.setTitle("Login page");
+        stage.setTitle("Experience");
         stage.setScene(scene);
         stage.show();
     }
