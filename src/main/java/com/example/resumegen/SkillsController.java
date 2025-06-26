@@ -9,15 +9,19 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.controlsfx.control.textfield.TextFields;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.UnaryOperator;
+import java.util.regex.Pattern;
 
 public class SkillsController {
     @FXML private VBox skillsContainer;
@@ -27,14 +31,14 @@ public class SkillsController {
     @FXML private Label label;
 
     private String username;
-    private final List<TextField> skillFields = new ArrayList<>();
-    private static final String[] SKILL_SUGGESTIONS = {
-            "Java", "Python", "JavaScript", "C++", "C#", "SQL",
-            "HTML", "CSS", "React", "Angular", "Vue.js",
-            "Node.js", "Spring Boot", "Django", "Flask",
-            "Project Management", "Team Leadership", "Communication",
-            "Problem Solving", "Agile Methodologies", "Git"
-    };
+    private final List<SkillRow> skillRows = new ArrayList<>();
+
+    // Skill row inner class to manage UI components
+    private static class SkillRow {
+        TextField nameField;
+        TextField percentField;
+        HBox container;
+    }
 
     public void setUsername(String username) {
         this.username = username;
@@ -44,67 +48,94 @@ public class SkillsController {
     @FXML
     public void initialize() {
         // Add initial skill field
-        addSkillField((ActionEvent) null);
+        addSkillField("", "");
     }
 
     @FXML
     public void addSkillField(ActionEvent event) {
-        addSkillField("");
+        addSkillField("", "");
     }
 
-    private void addSkillField(String initialValue) {
+    private void addSkillField(String name, String percent) {
+        SkillRow row = new SkillRow();
         HBox skillEntry = new HBox(10);
         skillEntry.setPadding(new Insets(0, 0, 10, 0));
 
-        TextField skillField = new TextField();
-        skillField.setPromptText("Enter skill");
-        skillField.setPrefWidth(300);
-        skillField.setText(initialValue);
+        // Skill name field with autocomplete
+        row.nameField = new TextField();
+        row.nameField.setPromptText("Skill name");
+        row.nameField.setPrefWidth(200);
+        row.nameField.setText(name);
+        TextFields.bindAutoCompletion(row.nameField,
+                "Java", "Python", "JavaScript", "C++", "C#", "SQL",
+                "HTML", "CSS", "React", "Angular", "Vue.js",
+                "Node.js", "Spring Boot", "Django", "Flask",
+                "Project Management", "Team Leadership", "Communication",
+                "Problem Solving", "Agile Methodologies", "Git"
+        );
 
-        // Add autocomplete
-        TextFields.bindAutoCompletion(skillField, SKILL_SUGGESTIONS);
+        // Skill percentage field with validation (0-100)
+        row.percentField = new TextField();
+        row.percentField.setPromptText("Percentage (0-100)");
+        row.percentField.setPrefWidth(100);
+        row.percentField.setText(percent);
 
+        // Add numeric validation
+        Pattern pattern = Pattern.compile("\\d*");
+        TextFormatter<String> formatter = new TextFormatter<>(change -> {
+            if (pattern.matcher(change.getControlNewText()).matches()) {
+                if (!change.getControlNewText().isEmpty()) {
+                    int value = Integer.parseInt(change.getControlNewText());
+                    if (value > 100) {
+                        change.setText("100");
+                        change.setRange(0, change.getControlText().length());
+                    }
+                }
+                return change;
+            }
+            return null;
+        });
+        row.percentField.setTextFormatter(formatter);
+
+        // Remove button
         Button removeButton = new Button("X");
         removeButton.setStyle("-fx-background-color: #ff6b6b; -fx-text-fill: white;");
-        removeButton.setOnAction(e -> removeSkillField(skillEntry));
+        removeButton.setOnAction(e -> removeSkillRow(row));
 
-        skillEntry.getChildren().addAll(skillField, removeButton);
+        skillEntry.getChildren().addAll(row.nameField, row.percentField, removeButton);
         skillsContainer.getChildren().add(skillEntry);
-        skillFields.add(skillField);
+
+        row.container = skillEntry;
+        skillRows.add(row);
     }
 
-    private void removeSkillField(HBox skillEntry) {
-        TextField field = (TextField) skillEntry.getChildren().get(0);
-        skillFields.remove(field);
-        skillsContainer.getChildren().remove(skillEntry);
+    private void removeSkillRow(SkillRow row) {
+        skillsContainer.getChildren().remove(row.container);
+        skillRows.remove(row);
     }
 
     private void loadSkillsData() {
         try {
             JSONObject resume = ResumeService.loadResume(username);
             if (resume.has("skills")) {
-                JSONObject skills = resume.getJSONObject("skills");
+                JSONArray skillsArray = resume.getJSONArray("skills");
 
                 // Clear existing fields
                 skillsContainer.getChildren().clear();
-                skillFields.clear();
+                skillRows.clear();
 
                 // Load saved skills
-                for (int i = 1; i <= 20; i++) {
-                    String skillKey = "skill" + i;
-                    if (skills.has(skillKey)) {
-                        String skillValue = skills.getString(skillKey);
-                        if (!skillValue.isBlank()) {
-                            addSkillField(skillValue);
-                        }
-                    } else {
-                        break;
-                    }
+                for (int i = 0; i < skillsArray.length(); i++) {
+                    JSONObject skill = skillsArray.getJSONObject(i);
+                    addSkillField(
+                            skill.optString("name", ""),
+                            skill.optString("percent", "")
+                    );
                 }
 
                 // Add one empty field if none exist
-                if (skillFields.isEmpty()) {
-                    addSkillField("");
+                if (skillRows.isEmpty()) {
+                    addSkillField("", "");
                 }
             }
         } catch (Exception e) {
@@ -135,13 +166,28 @@ public class SkillsController {
 
     private boolean validateSkills() {
         // Check if at least one skill is provided
-        for (TextField field : skillFields) {
-            if (!field.getText().isBlank()) {
-                return true;
+        boolean hasValidSkill = false;
+
+        for (SkillRow row : skillRows) {
+            String name = row.nameField.getText().trim();
+            String percent = row.percentField.getText().trim();
+
+            if (!name.isEmpty() && !percent.isEmpty()) {
+                hasValidSkill = true;
+            } else if (!name.isEmpty() && percent.isEmpty()) {
+                showError("Please enter percentage for: " + name);
+                return false;
+            } else if (name.isEmpty() && !percent.isEmpty()) {
+                showError("Please enter skill name for percentage");
+                return false;
             }
         }
-        showError("At least one skill is required");
-        return false;
+
+        if (!hasValidSkill) {
+            showError("At least one skill with percentage is required");
+            return false;
+        }
+        return true;
     }
 
     private void showError(String message) {
@@ -160,18 +206,21 @@ public class SkillsController {
     private void saveSkills() {
         try {
             JSONObject resume = ResumeService.loadResume(username);
-            JSONObject skills = new JSONObject();
+            JSONArray skillsArray = new JSONArray();
 
-            int skillCount = 1;
-            for (TextField field : skillFields) {
-                String skill = field.getText().trim();
-                if (!skill.isEmpty()) {
-                    skills.put("skill" + skillCount, skill);
-                    skillCount++;
+            for (SkillRow row : skillRows) {
+                String name = row.nameField.getText().trim();
+                String percent = row.percentField.getText().trim();
+
+                if (!name.isEmpty() && !percent.isEmpty()) {
+                    JSONObject skill = new JSONObject();
+                    skill.put("name", name);
+                    skill.put("percent", percent);
+                    skillsArray.put(skill);
                 }
             }
 
-            resume.put("skills", skills);
+            resume.put("skills", skillsArray);
             ResumeService.saveResume(username, resume);
         } catch (Exception e) {
             showError("Error saving skills: " + e.getMessage());

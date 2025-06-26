@@ -1,201 +1,152 @@
 package com.example.resumegen;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import org.json.JSONObject;
 
+import java.awt.Desktop;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ExperienceController {
-    @FXML private VBox experienceContainer;
-    @FXML private Button addExperienceButton;
-    @FXML private Button GenerateResume;
+    @FXML private TextField Company1;
+    @FXML private TextField JobTitle1;
+    @FXML private TextArea JobDescription1;
+    @FXML private TextField Company2;
+    @FXML private TextField JobTitle2;
+    @FXML private TextArea JobDescription2;
+    @FXML private Button NextButton;
     @FXML private Button Back;
+    @FXML private Label label;
 
     private String username;
-    private final List<ExperienceEntry> experienceEntries = new ArrayList<>();
 
     public void setUsername(String username) {
         this.username = username;
         loadExperienceData();
     }
 
-    @FXML
-    public void initialize() {
-        // Add initial experience field
-        addExperienceEntry(null);
-    }
-
-    @FXML
-    public void addExperienceEntry(ActionEvent event) {
-        addExperienceEntry("", "", "");
-    }
-
-    private void addExperienceEntry(String company, String jobTitle, String proficiency) {
-        HBox experienceEntry = new HBox(10);
-        experienceEntry.setPadding(new Insets(0, 0, 10, 0));
-
-        TextField companyField = new TextField();
-        companyField.setPromptText("Company");
-        companyField.setPrefWidth(150);
-        companyField.setText(company);
-
-        TextField jobTitleField = new TextField();
-        jobTitleField.setPromptText("Job Title");
-        jobTitleField.setPrefWidth(150);
-        jobTitleField.setText(jobTitle);
-
-        ComboBox<String> proficiencyCombo = new ComboBox<>();
-        proficiencyCombo.setPromptText("Proficiency");
-        proficiencyCombo.setPrefWidth(120);
-        proficiencyCombo.getItems().addAll("Beginner", "Intermediate", "Advanced", "Expert");
-        if (proficiency != null && !proficiency.isEmpty()) {
-            proficiencyCombo.setValue(proficiency);
-        }
-
-        Button removeButton = new Button("X");
-        removeButton.setStyle("-fx-background-color: #ff6b6b; -fx-text-fill: white;");
-        removeButton.setOnAction(e -> removeExperienceEntry(experienceEntry));
-
-        experienceEntry.getChildren().addAll(companyField, jobTitleField, proficiencyCombo, removeButton);
-        experienceContainer.getChildren().add(experienceEntry);
-
-        experienceEntries.add(new ExperienceEntry(companyField, jobTitleField, proficiencyCombo));
-    }
-
-    private void removeExperienceEntry(HBox experienceEntry) {
-        ExperienceEntry entry = experienceEntries.stream()
-                .filter(e -> e.container == experienceEntry)
-                .findFirst()
-                .orElse(null);
-
-        if (entry != null) {
-            experienceEntries.remove(entry);
-            experienceContainer.getChildren().remove(experienceEntry);
-        }
-    }
-
     private void loadExperienceData() {
         try {
             JSONObject resume = ResumeService.loadResume(username);
             if (resume.has("experience")) {
-                JSONObject experience = resume.getJSONObject("experience");
-
-                // Clear existing fields
-                experienceContainer.getChildren().clear();
-                experienceEntries.clear();
-
-                // Load saved experiences
-                for (int i = 1; i <= 20; i++) {
-                    String companyKey = "company" + i;
-                    String jobTitleKey = "jobTitle" + i;
-                    String proficiencyKey = "proficiency" + i;
-
-                    if (experience.has(companyKey)) {
-                        String company = experience.getString(companyKey);
-                        String jobTitle = experience.optString(jobTitleKey, "");
-                        String proficiency = experience.optString(proficiencyKey, "");
-
-                        addExperienceEntry(company, jobTitle, proficiency);
-                    } else {
-                        break;
-                    }
-                }
-
-                // Add one empty entry if none exist
-                if (experienceEntries.isEmpty()) {
-                    addExperienceEntry("", "", "");
-                }
+                JSONObject exp = resume.getJSONObject("experience");
+                Company1.setText(exp.optString("company1", ""));
+                JobTitle1.setText(exp.optString("jobTitle1", ""));
+                JobDescription1.setText(exp.optString("jobDescription1", ""));
+                Company2.setText(exp.optString("company2", ""));
+                JobTitle2.setText(exp.optString("jobTitle2", ""));
+                JobDescription2.setText(exp.optString("jobDescription2", ""));
             }
         } catch (Exception e) {
-            showAlert("Error loading experience data: " + e.getMessage());
+            showError("Error loading experience data: " + e.getMessage());
         }
     }
 
     @FXML
     public void backToSkills(ActionEvent event) throws IOException {
-        // Navigation code remains the same as before
+        FXMLLoader loader = new FXMLLoader(Main.class.getResource("Skills.fxml"));
+        Scene scene = new Scene(loader.load());
+
+        SkillsController controller = loader.getController();
+        controller.setUsername(username);
+
+        Stage stage = (Stage) Back.getScene().getWindow();
+        stage.setTitle("Skills");
+        stage.setScene(scene);
     }
 
     @FXML
-    public void GenerateResume(ActionEvent event) {
+    public void nextToLanguages(ActionEvent event) {
         if (validateExperience()) {
             saveExperience();
-            generatePDF();
+            navigateToLanguagesPage(event);
         }
     }
 
     private boolean validateExperience() {
-        for (ExperienceEntry entry : experienceEntries) {
-            if (entry.companyField.getText().isBlank() &&
-                    !entry.jobTitleField.getText().isBlank()) {
-                showAlert("Company name is required for job entries");
+        // Validate company 1 fields
+        if (!Company1.getText().isBlank()) {
+            if (JobTitle1.getText().isBlank()) {
+                showError("Job title is required for company 1");
+                return false;
+            }
+            if (JobDescription1.getText().isBlank()) {
+                showError("Job description is required for company 1");
                 return false;
             }
         }
+
+        // Validate company 2 fields
+        if (!Company2.getText().isBlank()) {
+            if (JobTitle2.getText().isBlank()) {
+                showError("Job title is required for company 2");
+                return false;
+            }
+            if (JobDescription2.getText().isBlank()) {
+                showError("Job description is required for company 2");
+                return false;
+            }
+        }
+
+        // At least one experience entry is required
+        if (Company1.getText().isBlank() && Company2.getText().isBlank()) {
+            showError("At least one work experience entry is required");
+            return false;
+        }
+
         return true;
     }
 
-    private void showAlert(String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Validation Error");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
+    private void saveExperience() {
+        JSONObject resume = ResumeService.loadResume(username);
+        JSONObject experience = new JSONObject();
+
+        experience.put("company1", Company1.getText().trim());
+        experience.put("jobTitle1", JobTitle1.getText().trim());
+        experience.put("jobDescription1", JobDescription1.getText().trim());
+        experience.put("company2", Company2.getText().trim());
+        experience.put("jobTitle2", JobTitle2.getText().trim());
+        experience.put("jobDescription2", JobDescription2.getText().trim());
+
+        resume.put("experience", experience);
+        ResumeService.saveResume(username, resume);
     }
 
-    private void saveExperience() {
+    private void navigateToLanguagesPage(ActionEvent event) {
         try {
-            JSONObject resume = ResumeService.loadResume(username);
-            JSONObject experience = new JSONObject();
+            FXMLLoader loader = new FXMLLoader(Main.class.getResource("Languages.fxml"));
+            Scene scene = new Scene(loader.load());
 
-            int entryCount = 1;
-            for (ExperienceEntry entry : experienceEntries) {
-                String company = entry.companyField.getText().trim();
-                String jobTitle = entry.jobTitleField.getText().trim();
-                String proficiency = entry.proficiencyCombo.getValue() != null ?
-                        entry.proficiencyCombo.getValue().toString() : "";
+            LanguagesController controller = loader.getController();
+            controller.setUsername(username);
 
-                if (!company.isEmpty() || !jobTitle.isEmpty()) {
-                    experience.put("company" + entryCount, company);
-                    experience.put("jobTitle" + entryCount, jobTitle);
-                    experience.put("proficiency" + entryCount, proficiency);
-                    entryCount++;
-                }
-            }
-
-            resume.put("experience", experience);
-            ResumeService.saveResume(username, resume);
-        } catch (Exception e) {
-            showAlert("Error saving experience: " + e.getMessage());
+            Stage stage = (Stage) NextButton.getScene().getWindow();
+            stage.setTitle("Languages");
+            stage.setScene(scene);
+        } catch (IOException e) {
+            showError("Error navigating to languages page: " + e.getMessage());
         }
     }
 
-    private void generatePDF() {
-        // PDF generation code remains the same as before
-    }
-
-    // Helper class to manage experience entries
-    private static class ExperienceEntry {
-        TextField companyField;
-        TextField jobTitleField;
-        ComboBox<String> proficiencyCombo;
-        HBox container;
-
-        public ExperienceEntry(TextField companyField, TextField jobTitleField,
-                               ComboBox<String> proficiencyCombo) {
-            this.companyField = companyField;
-            this.jobTitleField = jobTitleField;
-            this.proficiencyCombo = proficiencyCombo;
+    private void showError(String message) {
+        if (label != null) {
+            label.setText(message);
+            label.setVisible(true);
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Validation Error");
+            alert.setHeaderText(null);
+            alert.setContentText(message);
+            alert.showAndWait();
         }
     }
 }
