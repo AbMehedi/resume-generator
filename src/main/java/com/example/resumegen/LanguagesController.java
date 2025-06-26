@@ -27,7 +27,7 @@ public class LanguagesController {
     @FXML private ComboBox<String> proficiencyComboBox;
     @FXML private Button addButton;
     @FXML private Button backButton;
-    @FXML private Button generateButton;
+    @FXML private Button nextButton;
     @FXML private Label errorLabel;
 
     private String username;
@@ -42,11 +42,12 @@ public class LanguagesController {
         proficiencyComboBox.getItems().addAll(
                 "Native", "Fluent", "Intermediate", "Basic"
         );
-        proficiencyComboBox.setValue("Intermediate"); // Default value
+        proficiencyComboBox.setValue("Intermediate");
     }
 
     private void loadLanguages() {
         try {
+            languagesList.getItems().clear();
             JSONObject resume = ResumeService.loadResume(username);
             if (resume.has("languages")) {
                 JSONArray languages = resume.getJSONArray("languages");
@@ -132,36 +133,35 @@ public class LanguagesController {
     }
 
     @FXML
-    public void generateResume() {
-        saveLanguages();
-        generatePDF();
-    }
-
-    private void generatePDF() {
-        try {
-            JSONObject resume = ResumeService.loadResume(username);
-            String html = TemplateEngine.generateResume(resume);
-
-            String pdfPath = username + "_resume.pdf";
-            HtmlConverter.convertToPdf(html, new FileOutputStream(pdfPath));
-
-            // Open PDF after generation
-            if (Desktop.isDesktopSupported()) {
-                Desktop.getDesktop().open(new File(pdfPath));
-            }
-
-            showSuccessAlert("Resume Generated", "PDF saved to: " + pdfPath);
-        } catch (Exception e) {
-            showError("PDF Generation Failed: " + e.getMessage());
+    public void goToInterests(ActionEvent event) {
+        if (validateLanguages()) {
+            saveLanguages();
+            navigateToInterestsPage(event);
         }
     }
 
-    private void showSuccessAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
+    private boolean validateLanguages() {
+        if (languagesList.getItems().isEmpty()) {
+            showError("Please add at least one language");
+            return false;
+        }
+        return true;
+    }
+
+    private void navigateToInterestsPage(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(Main.class.getResource("Interests.fxml"));
+            Scene scene = new Scene(loader.load());
+
+            InterestsController controller = loader.getController();
+            controller.setUsername(username);
+
+            Stage stage = (Stage) nextButton.getScene().getWindow();
+            stage.setTitle("Interests");
+            stage.setScene(scene);
+        } catch (IOException e) {
+            showError("Error navigating to interests page: " + e.getMessage());
+        }
     }
 
     private void showError(String message) {

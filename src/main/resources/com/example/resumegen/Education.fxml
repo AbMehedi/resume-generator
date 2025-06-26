@@ -33,6 +33,6 @@
       <TextField fx:id="University_CGPA" layoutX="504.0" layoutY="288.0" prefHeight="26.0" prefWidth="66.0" />
       <TextField fx:id="University_PassingYear" layoutX="360.0" layoutY="289.0" prefHeight="26.0" prefWidth="88.0" />
       <Button fx:id="Back" layoutX="45.0" layoutY="340.0" mnemonicParsing="false" onAction="#backToPersonalInfo" text="Back" />
-      <Button fx:id="SaveAndContinue" layoutX="455.0" layoutY="340.0" mnemonicParsing="false" onAction="#SkillPage" text="Save And Continue" />
+      <Button fx:id="SaveAndContinue" layoutX="455.0" layoutY="340.0" mnemonicParsing="false" onAction="#navigateToSkillsPage" text="Save And Continue" />
    </children>
 </AnchorPane>

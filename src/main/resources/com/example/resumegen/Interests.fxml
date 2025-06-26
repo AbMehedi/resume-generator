@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/17.0.2-ea"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.resumegen.InterestsController"
+            prefHeight="500.0" prefWidth="600.0">
+
+    <Label layoutX="35.0" layoutY="32.0" text="Interests" underline="true">
+        <font>
+            <Font name="Bell MT Bold" size="24.0" />
+        </font>
+    </Label>
+
+    <HBox layoutX="50.0" layoutY="70.0" spacing="10.0">
+        <TextField fx:id="interestField" promptText="Enter interest" prefWidth="350.0"/>
+        <Button fx:id="addButton" mnemonicParsing="false" onAction="#addInterest" text="Add"/>
+    </HBox>
+
+    <ListView fx:id="interestsList" layoutX="50.0" layoutY="110.0" prefHeight="250.0" prefWidth="500.0"/>
+
+    <Label fx:id="errorLabel" layoutX="50.0" layoutY="370.0" textFill="RED" visible="false" />
+
+    <Button fx:id="backButton" layoutX="40.0" layoutY="420.0" mnemonicParsing="false"
+            onAction="#backToLanguages" text="Back"/>
+
+    <Button fx:id="generateButton" layoutX="465.0" layoutY="420.0" mnemonicParsing="false"
+            onAction="#generateResume" text="Generate PDF"/>
+</AnchorPane>

@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.json.JSONObject;
@@ -28,6 +29,8 @@ public class Personal_InfoController {
     @FXML
     private TextField Address;
     @FXML
+    private TextArea AboutMe;
+    @FXML
     private Button SaveAndContinue;
     @FXML
     private Button Back;
@@ -42,20 +45,29 @@ public class Personal_InfoController {
 
     // Load existing personal information from JSON
     private void loadPersonalInfo() {
-        JSONObject resume = ResumeService.loadResume(username);
-        if (resume.has("personal")) {
-            JSONObject personal = resume.getJSONObject("personal");
-            FirstName.setText(personal.optString("firstName", ""));
-            LastName.setText(personal.optString("lastName", ""));
-            Email.setText(personal.optString("email", ""));
-            Phone.setText(personal.optString("phone", ""));
-            Nationality.setText(personal.optString("nationality", ""));
-            Address.setText(personal.optString("address", ""));
+        try {
+            JSONObject resume = ResumeService.loadResume(username);
+            if (resume.has("personal")) {
+                JSONObject personal = resume.getJSONObject("personal");
+                FirstName.setText(personal.optString("firstName", ""));
+                LastName.setText(personal.optString("lastName", ""));
+                Email.setText(personal.optString("email", ""));
+                Phone.setText(personal.optString("phone", ""));
+                Nationality.setText(personal.optString("nationality", ""));
+                Address.setText(personal.optString("address", ""));
+                AboutMe.setText(personal.optString("aboutMe", ""));
+            }
+        } catch (Exception e) {
+            showError("Error loading personal data: " + e.getMessage());
         }
     }
 
     // Validate required fields
     private boolean validateInputs() {
+        // Reset error state
+        label.setVisible(false);
+
+        // Validate name fields
         if (FirstName.getText().trim().isEmpty()) {
             showError("First name is required");
             return false;
@@ -64,6 +76,8 @@ public class Personal_InfoController {
             showError("Last name is required");
             return false;
         }
+
+        // Validate email
         if (Email.getText().trim().isEmpty()) {
             showError("Email is required");
             return false;
@@ -72,12 +86,20 @@ public class Personal_InfoController {
             showError("Invalid email format");
             return false;
         }
+
+        // Validate about me
+        if (AboutMe.getText().trim().length() < 50) {
+            showError("About Me should be at least 50 characters");
+            return false;
+        }
+
         return true;
     }
 
     private boolean isValidEmail(String email) {
-        // Simple email validation
-        return email.contains("@") && email.contains(".");
+        // More comprehensive email validation
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+        return email.matches(emailRegex);
     }
 
     private void showError(String message) {
@@ -124,22 +146,27 @@ public class Personal_InfoController {
     }
 
     private void savePersonalInfo() {
-        // Get the existing resume data
-        JSONObject resume = ResumeService.loadResume(username);
+        try {
+            // Get the existing resume data
+            JSONObject resume = ResumeService.loadResume(username);
 
-        // Create personal info JSON object
-        JSONObject personal = new JSONObject();
-        personal.put("firstName", FirstName.getText().trim());
-        personal.put("lastName", LastName.getText().trim());
-        personal.put("email", Email.getText().trim());
-        personal.put("phone", Phone.getText().trim());
-        personal.put("nationality", Nationality.getText().trim());
-        personal.put("address", Address.getText().trim());
+            // Create personal info JSON object
+            JSONObject personal = new JSONObject();
+            personal.put("firstName", FirstName.getText().trim());
+            personal.put("lastName", LastName.getText().trim());
+            personal.put("email", Email.getText().trim());
+            personal.put("phone", Phone.getText().trim());
+            personal.put("nationality", Nationality.getText().trim());
+            personal.put("address", Address.getText().trim());
+            personal.put("aboutMe", AboutMe.getText().trim());
 
-        // Add personal info to resume
-        resume.put("personal", personal);
+            // Add personal info to resume
+            resume.put("personal", personal);
 
-        // Save to file
-        ResumeService.saveResume(username, resume);
+            // Save to file
+            ResumeService.saveResume(username, resume);
+        } catch (Exception e) {
+            showError("Error saving personal data: " + e.getMessage());
+        }
     }
 }

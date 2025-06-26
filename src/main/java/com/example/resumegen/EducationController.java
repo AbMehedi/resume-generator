@@ -163,6 +163,7 @@ public class EducationController {
         }
     }
 
+    @FXML
     private void navigateToSkillsPage(ActionEvent event) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Skills.fxml"));
         Scene scene = new Scene(fxmlLoader.load());

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
@@ -8,46 +7,31 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-            prefHeight="500.0" prefWidth="600.0"
-            xmlns="http://javafx.com/javafx/23.0.1"
+<AnchorPane prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.example.resumegen.LanguagesController">
 
-    <children>
-        <VBox layoutX="20.0" layoutY="20.0" spacing="10.0" AnchorPane.topAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
-            <Label text="Languages" underline="true">
-                <font>
-                    <Font name="Bell MT Bold" size="24.0" />
-                </font>
-            </Label>
+    <Label layoutX="35.0" layoutY="32.0" text="Languages" underline="true">
+        <font>
+            <Font name="Bell MT Bold" size="24.0" />
+        </font>
+    </Label>
 
-            <Label text="Add your language proficiencies:" />
+    <HBox layoutX="50.0" layoutY="70.0" spacing="10.0">
+        <TextField fx:id="languageField" promptText="Language" prefWidth="150.0"/>
+        <ComboBox fx:id="proficiencyComboBox" prefWidth="150.0"/>
+        <Button fx:id="addButton" mnemonicParsing="false" onAction="#addLanguage" text="Add"/>
+    </HBox>
 
-            <HBox spacing="10.0">
-                <TextField fx:id="languageField" promptText="Language" prefWidth="200.0" />
-                <ComboBox fx:id="proficiencyComboBox" prefWidth="150.0" />
-                <Button fx:id="addButton" text="Add" onAction="#addLanguage" prefWidth="80.0" />
-            </HBox>
+    <ListView fx:id="languagesList" layoutX="50.0" layoutY="110.0" prefHeight="250.0" prefWidth="500.0"/>
 
-            <Label text="Your Languages:" />
-            <ListView fx:id="languagesList" prefHeight="200.0" prefWidth="560.0" />
+    <Label fx:id="errorLabel" layoutX="50.0" layoutY="370.0" textFill="RED" visible="false" />
 
-            <HBox spacing="10.0">
-                <Button text="Remove Selected" onAction="#removeLanguage" prefWidth="120.0" />
-            </HBox>
+    <Button fx:id="backButton" layoutX="40.0" layoutY="420.0" mnemonicParsing="false"
+            onAction="#backToExperience" text="Back"/>
 
-            <Label fx:id="errorLabel" textFill="RED" visible="false" />
-
-            <HBox spacing="20.0" alignment="BOTTOM_RIGHT" prefWidth="560.0">
-                <Button fx:id="backButton" text="Back" onAction="#backToExperience" prefWidth="100.0" />
-                <Button fx:id="generateButton" text="Generate Resume" onAction="#generateResume"
-                        style="-fx-background-color: #4CAF50; -fx-text-fill: white;"
-                        prefWidth="150.0" />
-            </HBox>
-        </VBox>
-    </children>
+    <Button fx:id="nextButton" layoutX="465.0" layoutY="420.0" mnemonicParsing="false"
+            onAction="#goToInterests" text="Save &amp; Continue"/>
 </AnchorPane>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{personal.firstName}} {{personal.lastName}} | Resume</title>
+    <title>Professional Resume</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -14,6 +14,9 @@
             --primary-light: #5f7cff;
             --text-primary: #ffffff;
             --text-secondary: #b0b0b0;
+            --success: #4ade80;
+            --warning: #fbbf24;
+            --danger: #f87171;
         }
 
         * {
@@ -276,6 +279,10 @@
             font-size: 0.9rem;
         }
 
+        .timeline-content p {
+            margin-bottom: 0.5rem;
+        }
+
         .education-item {
             margin-bottom: 1.5rem;
         }
@@ -314,6 +321,12 @@
             .contact-item {
                 justify-content: center;
             }
+
+            .avatar {
+                width: 110px;
+                height: 110px;
+                font-size: 2.8rem;
+            }
         }
 
         @media (max-width: 480px) {
@@ -334,6 +347,31 @@
                 gap: 0.3rem;
             }
         }
+
+        .print-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(74, 108, 247, 0.4);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .print-button:hover {
+            background: var(--primary-light);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(74, 108, 247, 0.5);
+        }
     </style>
 </head>
 <body>
@@ -343,9 +381,7 @@
         <div class="profile">
             <div class="avatar">{{initials}}</div>
             <h1 class="name">{{personal.firstName}} {{personal.lastName}}</h1>
-            {{#experience.jobTitle1}}
-            <div class="title">{{experience.jobTitle1}}</div>
-            {{/experience.jobTitle1}}
+            <div class="title">{{personal.jobTitle}}</div>
         </div>
 
         <div class="contact-info">
@@ -353,106 +389,51 @@
                 <i class="fas fa-id-card"></i> Contact
             </h2>
 
-            {{#personal.email}}
             <div class="contact-item">
                 <div class="contact-icon">
                     <i class="fas fa-envelope"></i>
                 </div>
                 <div class="contact-text">{{personal.email}}</div>
             </div>
-            {{/personal.email}}
 
-            {{#personal.phone}}
             <div class="contact-item">
                 <div class="contact-icon">
                     <i class="fas fa-phone"></i>
                 </div>
                 <div class="contact-text">{{personal.phone}}</div>
             </div>
-            {{/personal.phone}}
 
-            {{#personal.address}}
             <div class="contact-item">
                 <div class="contact-icon">
                     <i class="fas fa-map-marker-alt"></i>
                 </div>
                 <div class="contact-text">{{personal.address}}</div>
             </div>
-            {{/personal.address}}
-
-            {{#personal.nationality}}
-            <div class="contact-item">
-                <div class="contact-icon">
-                    <i class="fas fa-globe"></i>
-                </div>
-                <div class="contact-text">{{personal.nationality}}</div>
-            </div>
-            {{/personal.nationality}}
         </div>
 
-        {{#skills}}
         <div class="skills-section">
             <h2 class="section-title">
                 <i class="fas fa-star"></i> Skills
             </h2>
-
-            {{#skill1}}
-            <div class="skill-item">
-                <div class="skill-header">
-                    <div class="skill-name">{{skill1}}</div>
-                </div>
-                <div class="skill-bar">
-                    <div class="skill-level" style="width: 90%"></div>
-                </div>
-            </div>
-            {{/skill1}}
-
-            {{#skill2}}
-            <div class="skill-item">
-                <div class="skill-header">
-                    <div class="skill-name">{{skill2}}</div>
-                </div>
-                <div class="skill-bar">
-                    <div class="skill-level" style="width: 85%"></div>
-                </div>
-            </div>
-            {{/skill2}}
-
-            {{#skill3}}
-            <div class="skill-item">
-                <div class="skill-header">
-                    <div class="skill-name">{{skill3}}</div>
-                </div>
-                <div class="skill-bar">
-                    <div class="skill-level" style="width: 80%"></div>
-                </div>
-            </div>
-            {{/skill3}}
-
-            {{#skill4}}
-            <div class="skill-item">
-                <div class="skill-header">
-                    <div class="skill-name">{{skill4}}</div>
-                </div>
-                <div class="skill-bar">
-                    <div class="skill-level" style="width: 75%"></div>
-                </div>
-            </div>
-            {{/skill4}}
+            {{skillsSection}}
         </div>
-        {{/skills}}
+
+        <div class="languages-section">
+            <h2 class="section-title">
+                <i class="fas fa-language"></i> Languages
+            </h2>
+            {{languagesSection}}
+        </div>
     </div>
 
     <!-- Main Content -->
     <div class="main-content">
         <div class="about">
             <h2 class="section-title">
-                <i class="fas fa-user"></i> Professional Summary
+                <i class="fas fa-user"></i> About Me
             </h2>
             <p>
-                Experienced professional with a strong background in relevant field.
-                Dedicated to achieving excellence and delivering high-quality results.
-                Seeking opportunities to leverage skills and expertise in a challenging role.
+                {{aboutMe}}
             </p>
         </div>
 
@@ -462,31 +443,7 @@
                 <i class="fas fa-briefcase"></i> Work Experience
             </h2>
             <div class="timeline">
-                {{#experience.company1}}
-                <div class="timeline-item">
-                    <div class="timeline-header">
-                        <div class="timeline-title">{{experience.company1}}</div>
-                        <div class="timeline-date">Present</div>
-                    </div>
-                    <div class="timeline-subtitle">{{experience.jobTitle1}}</div>
-                    <div class="timeline-content">
-                        <p>Responsible for key duties and achievements at this position.</p>
-                    </div>
-                </div>
-                {{/experience.company1}}
-
-                {{#experience.company2}}
-                <div class="timeline-item">
-                    <div class="timeline-header">
-                        <div class="timeline-title">{{experience.company2}}</div>
-                        <div class="timeline-date">2020 - 2023</div>
-                    </div>
-                    <div class="timeline-subtitle">{{experience.jobTitle2}}</div>
-                    <div class="timeline-content">
-                        <p>Key responsibilities and accomplishments in this role.</p>
-                    </div>
-                </div>
-                {{/experience.company2}}
+                {{experienceSection}}
             </div>
         </div>
 
@@ -496,34 +453,38 @@
                 <i class="fas fa-graduation-cap"></i> Education
             </h2>
             <div class="timeline">
-                {{#education.universityName}}
-                <div class="timeline-item">
-                    <div class="timeline-header">
-                        <div class="timeline-title">{{education.universityName}}</div>
-                        <div class="timeline-date">{{education.universityPassingYear}}</div>
-                    </div>
-                    <div class="timeline-subtitle">{{education.universityDegree}}</div>
-                    <div class="timeline-content">
-                        <p>CGPA: {{education.universityCGPA}}</p>
-                    </div>
-                </div>
-                {{/education.universityName}}
+                {{educationSection}}
+            </div>
+        </div>
 
-                {{#education.collegeName}}
-                <div class="timeline-item">
-                    <div class="timeline-header">
-                        <div class="timeline-title">{{education.collegeName}}</div>
-                        <div class="timeline-date">{{education.collegePassingYear}}</div>
-                    </div>
-                    <div class="timeline-subtitle">{{education.collegeDegree}}</div>
-                    <div class="timeline-content">
-                        <p>CGPA: {{education.collegeCGPA}}</p>
-                    </div>
-                </div>
-                {{/education.collegeName}}
+        <!-- Interests -->
+        <div class="section">
+            <h2 class="section-title">
+                <i class="fas fa-heart"></i> Interests
+            </h2>
+            <div class="interests">
+                {{interestsSection}}
             </div>
         </div>
     </div>
 </div>
+
+<button class="print-button" onclick="window.print()">
+    <i class="fas fa-print"></i> Print Resume
+</button>
+
+<script>
+    // Simple animation for timeline items
+    document.addEventListener('DOMContentLoaded', function() {
+        const timelineItems = document.querySelectorAll('.timeline-item');
+
+        timelineItems.forEach((item, index) => {
+            setTimeout(() => {
+                item.style.opacity = '1';
+                item.style.transform = 'translateY(0)';
+            }, 200 * index);
+        });
+    });
+</script>
 </body>
 </html>
