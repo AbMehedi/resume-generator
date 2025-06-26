@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
@@ -18,6 +19,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Base64;
+import java.util.function.UnaryOperator;
+import java.util.regex.Pattern;
 
 public class Personal_InfoController {
     @FXML private Label label;
@@ -41,6 +44,60 @@ public class Personal_InfoController {
         this.username = username;
         loadPersonalInfo();
     }
+
+    @FXML
+    public void initialize() {
+        // Add auto-capitalization to single-line text fields
+        configureCapitalization(FirstName);
+        configureCapitalization(LastName);
+        configureCapitalization(Nationality);
+        configureCapitalization(Address);
+
+        // Add sentence capitalization to AboutMe text area
+        configureSentenceCapitalization(AboutMe);
+    }
+
+    private void configureCapitalization(TextField field) {
+        field.setTextFormatter(new TextFormatter<>(change -> {
+            if (change.isAdded() || change.isReplaced()) {
+                int start = change.getRangeStart();
+                if (start == 0) {
+                    // Capitalize first character at position 0
+                    String newText = change.getText();
+                    if (!newText.isEmpty()) {
+                        change.setText(newText.substring(0, 1).toUpperCase() +
+                                (newText.length() > 1 ? newText.substring(1) : ""));
+                    }
+                }
+            }
+            return change;
+        }));
+    }
+
+    // Configure auto-capitalization for sentences
+    private void configureSentenceCapitalization(TextArea area) {
+        area.setTextFormatter(new TextFormatter<>(change -> {
+            if (change.isAdded()) {
+                String text = change.getText();
+                String prevText = change.getControlText();
+                int start = change.getRangeStart();
+
+                // Capitalize if:
+                // 1. At start of text
+                // 2. After sentence-ending punctuation
+                if (start == 0 ||
+                        (start >= 2 &&
+                                Pattern.compile("[.!?]\\s+$").matcher(prevText.substring(0, start)).find())) {
+                    if (!text.isEmpty()) {
+                        change.setText(text.substring(0, 1).toUpperCase() +
+                                (text.length() > 1 ? text.substring(1) : ""));
+                    }
+                }
+            }
+            return change;
+        }));
+    }
+
 
     private void loadPersonalInfo() {
         try {

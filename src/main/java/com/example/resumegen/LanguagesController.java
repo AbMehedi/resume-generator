@@ -4,14 +4,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import org.controlsfx.control.textfield.TextFields;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -31,6 +27,34 @@ public class LanguagesController {
     @FXML private Label errorLabel;
 
     private String username;
+
+    @FXML
+    public void initialize() {
+        // Add auto-capitalization to language field
+        languageField.setTextFormatter(new TextFormatter<>(change -> {
+            if (change.isAdded() || change.isReplaced()) {
+                int start = change.getRangeStart();
+                if (start == 0) {
+                    String newText = change.getText();
+                    if (!newText.isEmpty()) {
+                        change.setText(newText.substring(0, 1).toUpperCase() +
+                                (newText.length() > 1 ? newText.substring(1) : ""));
+                    }
+                }
+            }
+            return change;
+        }));
+
+        TextFields.bindAutoCompletion(languageField,
+                "English", "Spanish", "French", "German", "Chinese",
+                "Hindi", "Arabic", "Portuguese", "Russian", "Japanese",
+                "Italian", "Korean", "Dutch", "Turkish", "Swedish",
+                "Polish", "Vietnamese", "Thai", "Indonesian", "Urdu",
+                "Bengali", "Punjabi", "Malay", "Filipino", "Greek",
+                "Czech", "Hungarian", "Romanian", "Danish", "Finnish",
+                "Norwegian", "Hebrew", "Ukrainian", "Catalan", "Croatian"
+        );
+    }
 
     public void setUsername(String username) {
         this.username = username;

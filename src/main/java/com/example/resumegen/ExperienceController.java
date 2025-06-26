@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.stage.Stage;
 import org.json.JSONObject;
 
@@ -15,6 +16,8 @@ import java.awt.Desktop;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.function.UnaryOperator;
+import java.util.regex.Pattern;
 
 public class ExperienceController {
     @FXML private TextField Company1;
@@ -33,6 +36,59 @@ public class ExperienceController {
         this.username = username;
         loadExperienceData();
     }
+
+    @FXML
+    public void initialize() {
+        // Configure capitalization for single-line fields
+        configureCapitalization(Company1);
+        configureCapitalization(JobTitle1);
+        configureCapitalization(Company2);
+        configureCapitalization(JobTitle2);
+
+        // Configure sentence capitalization for job descriptions
+        configureSentenceCapitalization(JobDescription1);
+        configureSentenceCapitalization(JobDescription2);
+    }
+
+    private void configureCapitalization(TextField field) {
+        field.setTextFormatter(new TextFormatter<>(change -> {
+            if (change.isAdded() || change.isReplaced()) {
+                int start = change.getRangeStart();
+                if (start == 0) {
+                    String newText = change.getText();
+                    if (!newText.isEmpty()) {
+                        change.setText(newText.substring(0, 1).toUpperCase() +
+                                (newText.length() > 1 ? newText.substring(1) : ""));
+                    }
+                }
+            }
+            return change;
+        }));
+    }
+
+    private void configureSentenceCapitalization(TextArea area) {
+        area.setTextFormatter(new TextFormatter<>(change -> {
+            if (change.isAdded()) {
+                String text = change.getText();
+                String prevText = change.getControlText();
+                int start = change.getRangeStart();
+
+                // Capitalize if:
+                // 1. At start of text
+                // 2. After sentence-ending punctuation
+                if (start == 0 ||
+                        (start >= 2 &&
+                                Pattern.compile("[.!?]\\s+$").matcher(prevText.substring(0, start)).find())) {
+                    if (!text.isEmpty()) {
+                        change.setText(text.substring(0, 1).toUpperCase() +
+                                (text.length() > 1 ? text.substring(1) : ""));
+                    }
+                }
+            }
+            return change;
+        }));
+    }
+
 
     private void loadExperienceData() {
         try {

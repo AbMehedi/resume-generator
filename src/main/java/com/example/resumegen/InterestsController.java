@@ -4,12 +4,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
+import org.controlsfx.control.textfield.TextFields;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import com.itextpdf.html2pdf.ConverterProperties;
@@ -29,6 +26,36 @@ public class InterestsController {
     @FXML private Label errorLabel;
 
     private String username;
+
+
+    @FXML
+    public void initialize() {
+        // Add auto-capitalization to interest field
+        interestField.setTextFormatter(new TextFormatter<>(change -> {
+            if (change.isAdded() || change.isReplaced()) {
+                int start = change.getRangeStart();
+                if (start == 0) {
+                    String newText = change.getText();
+                    if (!newText.isEmpty()) {
+                        change.setText(newText.substring(0, 1).toUpperCase() +
+                                (newText.length() > 1 ? newText.substring(1) : ""));
+                    }
+                }
+            }
+            return change;
+        }));
+
+        TextFields.bindAutoCompletion(interestField,
+                "Reading", "Writing", "Traveling", "Photography", "Cooking",
+                "Gardening", "Painting", "Drawing", "Music", "Dancing",
+                "Singing", "Hiking", "Cycling", "Swimming", "Running",
+                "Yoga", "Meditation", "Chess", "Board Games", "Video Games",
+                "Movies", "Theater", "Blogging", "Podcasting", "Volunteering",
+                "Learning languages", "Programming", "DIY Projects", "Woodworking",
+                "Knitting", "Fishing", "Camping", "Skiing", "Surfing", "Diving",
+                "Astronomy", "Bird watching", "Collecting", "Wine tasting", "Baking"
+        );
+    }
 
     public void setUsername(String username) {
         this.username = username;

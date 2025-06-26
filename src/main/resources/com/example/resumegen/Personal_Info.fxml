@@ -42,9 +42,9 @@
    <TextField fx:id="Address" layoutX="35.0" layoutY="401.0" prefWidth="580.0" />
 
    <Label layoutX="36.0" layoutY="437.0" text="About Me*" />
-   <TextArea fx:id="AboutMe" layoutX="36.0" layoutY="466.0" prefHeight="120.0" prefWidth="580.0" wrapText="true" promptText="Write a brief professional summary (at least 50 characters)" />
+   <TextArea fx:id="AboutMe" layoutX="36.0" layoutY="466.0" prefHeight="120.0" prefWidth="580.0" promptText="Write a brief professional summary (at least 50 characters)" wrapText="true" />
 
-   <Label fx:id="label" layoutX="35.0" layoutY="690.0" textFill="RED" visible="false" />
+   <Label fx:id="label" layoutX="284.0" layoutY="616.0" textFill="RED" visible="false" />
 
    <Button fx:id="Back" layoutX="34.0" layoutY="612.0" mnemonicParsing="false" onAction="#backToDashBoard" text="Back" />
 

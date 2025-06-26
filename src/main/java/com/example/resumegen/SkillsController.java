@@ -66,6 +66,21 @@ public class SkillsController {
         row.nameField.setPromptText("Skill name");
         row.nameField.setPrefWidth(200);
         row.nameField.setText(name);
+
+        // Add auto-capitalization formatter
+        row.nameField.setTextFormatter(new TextFormatter<>(change -> {
+            if (change.isAdded() || change.isReplaced()) {
+                int start = change.getRangeStart();
+                if (start == 0) {
+                    String newText = change.getText();
+                    if (!newText.isEmpty()) {
+                        change.setText(newText.substring(0, 1).toUpperCase() +
+                                (newText.length() > 1 ? newText.substring(1) : ""));
+                    }
+                }
+            }
+            return change;
+        }));
         TextFields.bindAutoCompletion(row.nameField,
                 "Java", "Python", "JavaScript", "C++", "C#", "SQL",
                 "HTML", "CSS", "React", "Angular", "Vue.js",

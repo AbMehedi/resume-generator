@@ -4,10 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import org.json.JSONObject;
 
@@ -27,6 +24,32 @@ public class EducationController {
     @FXML private Label label;
 
     private String username;
+
+    @FXML
+    public void initialize() {
+        // Add auto-capitalization to relevant fields
+        configureCapitalization(CollegeName);
+        configureCapitalization(College_Degree);
+        configureCapitalization(University_Name);
+        configureCapitalization(University_Degree);
+    }
+
+    private void configureCapitalization(TextField field) {
+        field.setTextFormatter(new TextFormatter<>(change -> {
+            if (change.isAdded() || change.isReplaced()) {
+                int start = change.getRangeStart();
+                if (start == 0) {
+                    // Capitalize first character at position 0
+                    String newText = change.getText();
+                    if (!newText.isEmpty()) {
+                        change.setText(newText.substring(0, 1).toUpperCase() +
+                                (newText.length() > 1 ? newText.substring(1) : ""));
+                    }
+                }
+            }
+            return change;
+        }));
+    }
 
     public void setUsername(String username) {
         this.username = username;
