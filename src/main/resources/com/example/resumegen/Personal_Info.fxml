@@ -4,12 +4,12 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/17.0.2-ea"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.example.resumegen.Personal_InfoController">
+<AnchorPane prefHeight="700.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.resumegen.Personal_InfoController">
 
    <Label layoutX="35.0" layoutY="32.0" text="Personal Information" underline="true">
       <font>
@@ -17,33 +17,38 @@
       </font>
    </Label>
 
-   <Label layoutX="35.0" layoutY="80.0" text="First Name*" />
-   <TextField fx:id="FirstName" layoutX="35.0" layoutY="100.0" prefWidth="250.0" />
+   <!-- Profile Picture Section -->
+   <Label layoutX="498.0" layoutY="185.0" text="Profile Picture" />
+   <HBox layoutX="35.0" layoutY="100.0" spacing="10.0" />
+   <Label fx:id="imageErrorLabel" layoutX="35.0" layoutY="210.0" style="-fx-text-fill: red;" visible="false" />
 
-   <Label layoutX="35.0" layoutY="140.0" text="Last Name*" />
-   <TextField fx:id="LastName" layoutX="35.0" layoutY="160.0" prefWidth="250.0" />
+   <!-- Personal Information Fields -->
+   <Label layoutX="34.0" layoutY="103.0" text="First Name*" />
+   <TextField fx:id="FirstName" layoutX="35.0" layoutY="121.0" prefWidth="250.0" />
 
-   <Label layoutX="35.0" layoutY="200.0" text="Email*" />
-   <TextField fx:id="Email" layoutX="35.0" layoutY="220.0" prefWidth="580.0" />
+   <Label layoutX="33.0" layoutY="162.0" text="Last Name*" />
+   <TextField fx:id="LastName" layoutX="35.0" layoutY="190.0" prefWidth="250.0" />
 
-   <Label layoutX="35.0" layoutY="260.0" text="Phone" />
-   <TextField fx:id="Phone" layoutX="35.0" layoutY="280.0" prefWidth="250.0" />
+   <Label layoutX="35.0" layoutY="232.0" text="Email*" />
+   <TextField fx:id="Email" layoutX="35.0" layoutY="261.0" prefWidth="580.0" />
 
-   <Label layoutX="365.0" layoutY="260.0" text="Nationality" />
-   <TextField fx:id="Nationality" layoutX="365.0" layoutY="280.0" prefWidth="250.0" />
+   <Label layoutX="34.0" layoutY="303.0" text="Phone" />
+   <TextField fx:id="Phone" layoutX="35.0" layoutY="331.0" prefWidth="250.0" />
 
-   <Label layoutX="35.0" layoutY="320.0" text="Address" />
-   <TextField fx:id="Address" layoutX="35.0" layoutY="340.0" prefWidth="580.0" />
+   <Label layoutX="365.0" layoutY="303.0" text="Nationality" />
+   <TextField fx:id="Nationality" layoutX="364.0" layoutY="331.0" prefWidth="250.0" />
 
-   <Label layoutX="35.0" layoutY="380.0" text="About Me*" />
-   <TextArea fx:id="AboutMe" layoutX="35.0" layoutY="400.0" prefHeight="120.0" prefWidth="580.0"
-             promptText="Write a brief professional summary (at least 50 characters)"/>
+   <Label layoutX="33.0" layoutY="373.0" text="Address" />
+   <TextField fx:id="Address" layoutX="35.0" layoutY="401.0" prefWidth="580.0" />
 
-   <Label fx:id="label" layoutX="35.0" layoutY="530.0" textFill="RED" visible="false" />
+   <Label layoutX="36.0" layoutY="437.0" text="About Me*" />
+   <TextArea fx:id="AboutMe" layoutX="36.0" layoutY="466.0" prefHeight="120.0" prefWidth="580.0" wrapText="true" promptText="Write a brief professional summary (at least 50 characters)" />
 
-   <Button fx:id="Back" layoutX="35.0" layoutY="560.0" mnemonicParsing="false"
-           onAction="#backToDashBoard" text="Back" />
+   <Label fx:id="label" layoutX="35.0" layoutY="690.0" textFill="RED" visible="false" />
 
-   <Button fx:id="SaveAndContinue" layoutX="540.0" layoutY="560.0" mnemonicParsing="false"
-           onAction="#saveAndContinue" text="Save &amp; Continue" />
+   <Button fx:id="Back" layoutX="34.0" layoutY="612.0" mnemonicParsing="false" onAction="#backToDashBoard" text="Back" />
+
+   <Button fx:id="SaveAndContinue" layoutX="510.0" layoutY="612.0" mnemonicParsing="false" onAction="#saveAndContinue" text="Save &amp; Continue" />
+   <ImageView fx:id="profileImageView" fitHeight="100.0" fitWidth="100.0" layoutX="485.0" layoutY="62.0" preserveRatio="true" />
+   <Button fx:id="chooseImageButton" layoutX="489.0" layoutY="215.0" mnemonicParsing="false" onAction="#handleChooseImage" text="Choose Image" />
 </AnchorPane>

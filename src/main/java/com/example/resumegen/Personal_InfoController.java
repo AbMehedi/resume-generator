@@ -8,47 +8,46 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.json.JSONObject;
-
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Base64;
 
 public class Personal_InfoController {
-    @FXML
-    private Label label;
-    @FXML
-    private TextField FirstName;
-    @FXML
-    private TextField LastName;
-    @FXML
-    private TextField Email;
-    @FXML
-    private TextField Phone;
-    @FXML
-    private TextField Nationality;
-    @FXML
-    private TextField Address;
-    @FXML
-    private TextArea AboutMe;
-    @FXML
-    private Button SaveAndContinue;
-    @FXML
-    private Button Back;
+    @FXML private Label label;
+    @FXML private TextField FirstName;
+    @FXML private TextField LastName;
+    @FXML private TextField Email;
+    @FXML private TextField Phone;
+    @FXML private TextField Nationality;
+    @FXML private TextField Address;
+    @FXML private TextArea AboutMe;
+    @FXML private Button SaveAndContinue;
+    @FXML private Button Back;
+    @FXML private Button chooseImageButton;
+    @FXML private ImageView profileImageView;
+    @FXML private Label imageErrorLabel;
 
     private String username;
+    private String profilePictureBase64;
 
-    // Setter method to set the username and load existing data
     public void setUsername(String username) {
         this.username = username;
         loadPersonalInfo();
     }
 
-    // Load existing personal information from JSON
     private void loadPersonalInfo() {
         try {
             JSONObject resume = ResumeService.loadResume(username);
             if (resume.has("personal")) {
                 JSONObject personal = resume.getJSONObject("personal");
+                // Existing fields
                 FirstName.setText(personal.optString("firstName", ""));
                 LastName.setText(personal.optString("lastName", ""));
                 Email.setText(personal.optString("email", ""));
@@ -56,16 +55,72 @@ public class Personal_InfoController {
                 Nationality.setText(personal.optString("nationality", ""));
                 Address.setText(personal.optString("address", ""));
                 AboutMe.setText(personal.optString("aboutMe", ""));
+
+                // Load profile picture
+                if (personal.has("profilePicture")) {
+                    profilePictureBase64 = personal.getString("profilePicture");
+                    profileImageView.setImage(convertBase64ToImage(profilePictureBase64));
+                }
             }
         } catch (Exception e) {
             showError("Error loading personal data: " + e.getMessage());
         }
     }
 
+    @FXML
+    private void handleChooseImage(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select Profile Picture");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("ImageFiles", "*.png", "*.jpg", "*.jpeg")
+        );
+
+        File selectedFile = fileChooser.showOpenDialog(null);
+        if (selectedFile != null) {
+            try {
+                // Validate file size (max 2MB)
+                if (selectedFile.length() > 2 * 1024 * 1024) {
+                    imageErrorLabel.setText("Image too large (max 2MB)");
+                    imageErrorLabel.setVisible(true);
+                    return;
+                }
+
+                // Process and display image
+                profilePictureBase64 = convertImageToBase64(selectedFile);
+                profileImageView.setImage(convertBase64ToImage(profilePictureBase64));
+                imageErrorLabel.setVisible(false);
+            } catch (IOException e) {
+                imageErrorLabel.setText("Error loading image");
+                imageErrorLabel.setVisible(true);
+            }
+        }
+    }
+
+    private String convertImageToBase64(File file) throws IOException {
+        try (FileInputStream imageStream = new FileInputStream(file);
+             ByteArrayOutputStream byteStream = new ByteArrayOutputStream()) {
+
+            byte[] buffer = new byte[4096];
+            int bytesRead;
+            while ((bytesRead = imageStream.read(buffer)) != -1) {
+                byteStream.write(buffer, 0, bytesRead);
+            }
+
+            return Base64.getEncoder().encodeToString(byteStream.toByteArray());
+        }
+    }
+
+    private Image convertBase64ToImage(String base64) {
+        if (base64 == null || base64.isEmpty()) return null;
+        byte[] imageData = Base64.getDecoder().decode(base64);
+        return new Image(new java.io.ByteArrayInputStream(imageData));
+    }
+
     // Validate required fields
     private boolean validateInputs() {
-        // Reset error state
+        // Reset error states
         label.setVisible(false);
+        imageErrorLabel.setVisible(false);
 
         // Validate name fields
         if (FirstName.getText().trim().isEmpty()) {
@@ -124,6 +179,7 @@ public class Personal_InfoController {
     public void saveAndContinue(ActionEvent event) throws IOException {
         // Hide any previous errors
         label.setVisible(false);
+        imageErrorLabel.setVisible(false);
 
         // Validate inputs
         if (!validateInputs()) {
@@ -159,6 +215,11 @@ public class Personal_InfoController {
             personal.put("nationality", Nationality.getText().trim());
             personal.put("address", Address.getText().trim());
             personal.put("aboutMe", AboutMe.getText().trim());
+
+            // Add profile picture if exists
+            if (profilePictureBase64 != null && !profilePictureBase64.isEmpty()) {
+                personal.put("profilePicture", profilePictureBase64);
+            }
 
             // Add personal info to resume
             resume.put("personal", personal);

@@ -14,37 +14,44 @@ import java.util.regex.Pattern;
 public class TemplateEngine {
     private static final String TEMPLATE_DIR = "src/main/resources/templates/";
 
-//    public static String generateResume(JSONObject resumeData) throws IOException {
-//        // Load the HTML template file
-//        String templateContent = new String(Files.readAllBytes(
-//                Paths.get(TEMPLATE_DIR + "project_template.html")
-//        ));
-//
-//        // Create data model with all resume sections
-//        Map<String, String> dataModel = createDataModel(resumeData);
-//
-//        // Replace placeholders with actual data
-//        return replacePlaceholders(templateContent, dataModel);
-//    }
-public static String generateResume(JSONObject resumeData) throws IOException {
-    // Load template file
-    String templateContent = Files.readString(Paths.get(TEMPLATE_DIR + "project_template.html"));
+    public static String generateResume(JSONObject resumeData) throws IOException {
+        // Load template file
+        String templateContent = Files.readString(Paths.get(TEMPLATE_DIR + "project_template.html"));
 
-    // Create data model
-    Map<String, String> dataModel = createDataModel(resumeData);
+        // Create data model
+        Map<String, String> dataModel = createDataModel(resumeData);
 
-    // Replace placeholders
-    return replacePlaceholders(templateContent, dataModel);
-}
+        // Replace placeholders
+        return replacePlaceholders(templateContent, dataModel);
+    }
 
     private static Map<String, String> createDataModel(JSONObject resume) {
         Map<String, String> model = new HashMap<>();
+
+        // Initialize profile picture and initials
+        model.put("profilePicture", "");
+        model.put("initials", "");
 
         // Personal Information Section
         if (resume.has("personal")) {
             JSONObject personal = resume.getJSONObject("personal");
             addToModel(model, "personal", personal);
+
+            // Set initials
             model.put("initials", getInitials(personal));
+
+            // Handle profile picture
+            if (personal.has("profilePicture")) {
+                String base64Image = personal.getString("profilePicture");
+                if (!base64Image.isEmpty()) {
+                    // Detect image type
+                    String mimeType = "image/jpeg"; // Default to JPEG
+                    if (base64Image.startsWith("iVBORw")) {
+                        mimeType = "image/png"; // PNG detection
+                    }
+                    model.put("profilePicture", "data:" + mimeType + ";base64," + base64Image);
+                }
+            }
 
             // Set job title if available, otherwise use default
             if (personal.has("jobTitle")) {
