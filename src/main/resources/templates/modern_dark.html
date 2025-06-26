@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{personal.firstName}} {{personal.lastName}} | Resume</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --dark-bg: #121212;
+            --dark-card: #1e1e1e;
+            --dark-accent: #2d2d2d;
+            --primary: #4a6cf7;
+            --primary-light: #5f7cff;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: 2rem;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .resume-container {
+            max-width: 1000px;
+            width: 100%;
+            background: var(--dark-card);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            background: linear-gradient(145deg, #1a1a1a, #151515);
+            padding: 2.5rem 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sidebar::before {
+            content: "";
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: var(--primary);
+            opacity: 0.1;
+        }
+
+        .profile {
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .avatar {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            border: 4px solid var(--primary);
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 3.5rem;
+            color: white;
+            font-weight: bold;
+        }
+
+        .name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .title {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            font-weight: 400;
+        }
+
+        .contact-info {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .contact-item:hover {
+            transform: translateX(5px);
+        }
+
+        .contact-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 0.8rem;
+            flex-shrink: 0;
+        }
+
+        .contact-text {
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
+
+        .skills-section {
+            margin-bottom: 2rem;
+        }
+
+        .skill-item {
+            margin-bottom: 1.2rem;
+        }
+
+        .skill-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .skill-name {
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .skill-bar {
+            height: 6px;
+            background: var(--dark-accent);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .skill-level {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 3px;
+        }
+
+        .languages-section .skill-item {
+            display: flex;
+            align-items: center;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            padding: 2.5rem;
+        }
+
+        .about {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--dark-accent);
+        }
+
+        .about p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        .section {
+            margin-bottom: 2rem;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-left: 0.5rem;
+        }
+
+        .timeline::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 10px;
+            bottom: 10px;
+            width: 2px;
+            background: var(--primary);
+            border-radius: 3px;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 1.8rem;
+            padding-left: 1.5rem;
+        }
+
+        .timeline-item::before {
+            content: "";
+            position: absolute;
+            left: -7px;
+            top: 8px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--primary);
+            border: 2px solid var(--dark-card);
+            z-index: 2;
+        }
+
+        .timeline-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.3rem;
+            flex-wrap: wrap;
+        }
+
+        .timeline-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .timeline-date {
+            color: var(--primary);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .timeline-subtitle {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+            font-size: 0.95rem;
+        }
+
+        .timeline-content {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .education-item {
+            margin-bottom: 1.5rem;
+        }
+
+        .interests {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-top: 0.5rem;
+        }
+
+        .interest-item {
+            padding: 0.4rem 0.9rem;
+            background: var(--primary);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            transition: transform 0.3s ease;
+        }
+
+        .interest-item:hover {
+            transform: translateY(-3px);
+            background: var(--primary-light);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 850px) {
+            .resume-container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                text-align: center;
+                padding: 2rem 1rem;
+            }
+
+            .contact-item {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 1rem;
+            }
+
+            .resume-container {
+                border-radius: 8px;
+            }
+
+            .main-content {
+                padding: 1.5rem;
+            }
+
+            .timeline-header {
+                flex-direction: column;
+                gap: 0.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="resume-container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="profile">
+            <div class="avatar">{{initials}}</div>
+            <h1 class="name">{{personal.firstName}} {{personal.lastName}}</h1>
+            {{#experience.jobTitle1}}
+            <div class="title">{{experience.jobTitle1}}</div>
+            {{/experience.jobTitle1}}
+        </div>
+
+        <div class="contact-info">
+            <h2 class="section-title">
+                <i class="fas fa-id-card"></i> Contact
+            </h2>
+
+            {{#personal.email}}
+            <div class="contact-item">
+                <div class="contact-icon">
+                    <i class="fas fa-envelope"></i>
+                </div>
+                <div class="contact-text">{{personal.email}}</div>
+            </div>
+            {{/personal.email}}
+
+            {{#personal.phone}}
+            <div class="contact-item">
+                <div class="contact-icon">
+                    <i class="fas fa-phone"></i>
+                </div>
+                <div class="contact-text">{{personal.phone}}</div>
+            </div>
+            {{/personal.phone}}
+
+            {{#personal.address}}
+            <div class="contact-item">
+                <div class="contact-icon">
+                    <i class="fas fa-map-marker-alt"></i>
+                </div>
+                <div class="contact-text">{{personal.address}}</div>
+            </div>
+            {{/personal.address}}
+
+            {{#personal.nationality}}
+            <div class="contact-item">
+                <div class="contact-icon">
+                    <i class="fas fa-globe"></i>
+                </div>
+                <div class="contact-text">{{personal.nationality}}</div>
+            </div>
+            {{/personal.nationality}}
+        </div>
+
+        {{#skills}}
+        <div class="skills-section">
+            <h2 class="section-title">
+                <i class="fas fa-star"></i> Skills
+            </h2>
+
+            {{#skill1}}
+            <div class="skill-item">
+                <div class="skill-header">
+                    <div class="skill-name">{{skill1}}</div>
+                </div>
+                <div class="skill-bar">
+                    <div class="skill-level" style="width: 90%"></div>
+                </div>
+            </div>
+            {{/skill1}}
+
+            {{#skill2}}
+            <div class="skill-item">
+                <div class="skill-header">
+                    <div class="skill-name">{{skill2}}</div>
+                </div>
+                <div class="skill-bar">
+                    <div class="skill-level" style="width: 85%"></div>
+                </div>
+            </div>
+            {{/skill2}}
+
+            {{#skill3}}
+            <div class="skill-item">
+                <div class="skill-header">
+                    <div class="skill-name">{{skill3}}</div>
+                </div>
+                <div class="skill-bar">
+                    <div class="skill-level" style="width: 80%"></div>
+                </div>
+            </div>
+            {{/skill3}}
+
+            {{#skill4}}
+            <div class="skill-item">
+                <div class="skill-header">
+                    <div class="skill-name">{{skill4}}</div>
+                </div>
+                <div class="skill-bar">
+                    <div class="skill-level" style="width: 75%"></div>
+                </div>
+            </div>
+            {{/skill4}}
+        </div>
+        {{/skills}}
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="about">
+            <h2 class="section-title">
+                <i class="fas fa-user"></i> Professional Summary
+            </h2>
+            <p>
+                Experienced professional with a strong background in relevant field.
+                Dedicated to achieving excellence and delivering high-quality results.
+                Seeking opportunities to leverage skills and expertise in a challenging role.
+            </p>
+        </div>
+
+        <!-- Experience Section -->
+        <div class="section">
+            <h2 class="section-title">
+                <i class="fas fa-briefcase"></i> Work Experience
+            </h2>
+            <div class="timeline">
+                {{#experience.company1}}
+                <div class="timeline-item">
+                    <div class="timeline-header">
+                        <div class="timeline-title">{{experience.company1}}</div>
+                        <div class="timeline-date">Present</div>
+                    </div>
+                    <div class="timeline-subtitle">{{experience.jobTitle1}}</div>
+                    <div class="timeline-content">
+                        <p>Responsible for key duties and achievements at this position.</p>
+                    </div>
+                </div>
+                {{/experience.company1}}
+
+                {{#experience.company2}}
+                <div class="timeline-item">
+                    <div class="timeline-header">
+                        <div class="timeline-title">{{experience.company2}}</div>
+                        <div class="timeline-date">2020 - 2023</div>
+                    </div>
+                    <div class="timeline-subtitle">{{experience.jobTitle2}}</div>
+                    <div class="timeline-content">
+                        <p>Key responsibilities and accomplishments in this role.</p>
+                    </div>
+                </div>
+                {{/experience.company2}}
+            </div>
+        </div>
+
+        <!-- Education Section -->
+        <div class="section">
+            <h2 class="section-title">
+                <i class="fas fa-graduation-cap"></i> Education
+            </h2>
+            <div class="timeline">
+                {{#education.universityName}}
+                <div class="timeline-item">
+                    <div class="timeline-header">
+                        <div class="timeline-title">{{education.universityName}}</div>
+                        <div class="timeline-date">{{education.universityPassingYear}}</div>
+                    </div>
+                    <div class="timeline-subtitle">{{education.universityDegree}}</div>
+                    <div class="timeline-content">
+                        <p>CGPA: {{education.universityCGPA}}</p>
+                    </div>
+                </div>
+                {{/education.universityName}}
+
+                {{#education.collegeName}}
+                <div class="timeline-item">
+                    <div class="timeline-header">
+                        <div class="timeline-title">{{education.collegeName}}</div>
+                        <div class="timeline-date">{{education.collegePassingYear}}</div>
+                    </div>
+                    <div class="timeline-subtitle">{{education.collegeDegree}}</div>
+                    <div class="timeline-content">
+                        <p>CGPA: {{education.collegeCGPA}}</p>
+                    </div>
+                </div>
+                {{/education.collegeName}}
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

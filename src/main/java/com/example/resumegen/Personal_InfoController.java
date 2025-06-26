@@ -8,14 +8,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import org.json.JSONObject;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 
 public class Personal_InfoController {
-
     @FXML
     private Label label;
     @FXML
@@ -37,92 +34,112 @@ public class Personal_InfoController {
 
     private String username;
 
-    // Setter method to set the username passed from the previous controller (DashboardController)
+    // Setter method to set the username and load existing data
     public void setUsername(String username) {
         this.username = username;
+        loadPersonalInfo();
     }
 
-    // Getter methods for the form fields
-    public String getFirstname() {
-        return FirstName.getText();
+    // Load existing personal information from JSON
+    private void loadPersonalInfo() {
+        JSONObject resume = ResumeService.loadResume(username);
+        if (resume.has("personal")) {
+            JSONObject personal = resume.getJSONObject("personal");
+            FirstName.setText(personal.optString("firstName", ""));
+            LastName.setText(personal.optString("lastName", ""));
+            Email.setText(personal.optString("email", ""));
+            Phone.setText(personal.optString("phone", ""));
+            Nationality.setText(personal.optString("nationality", ""));
+            Address.setText(personal.optString("address", ""));
+        }
     }
 
-    public String getLastname() {
-        return LastName.getText();
+    // Validate required fields
+    private boolean validateInputs() {
+        if (FirstName.getText().trim().isEmpty()) {
+            showError("First name is required");
+            return false;
+        }
+        if (LastName.getText().trim().isEmpty()) {
+            showError("Last name is required");
+            return false;
+        }
+        if (Email.getText().trim().isEmpty()) {
+            showError("Email is required");
+            return false;
+        }
+        if (!isValidEmail(Email.getText().trim())) {
+            showError("Invalid email format");
+            return false;
+        }
+        return true;
     }
 
-    public String getEmail() {
-        return Email.getText();
+    private boolean isValidEmail(String email) {
+        // Simple email validation
+        return email.contains("@") && email.contains(".");
     }
 
-    public String getPhone() {
-        return Phone.getText();
+    private void showError(String message) {
+        label.setText(message);
+        label.setVisible(true);
     }
 
-    public String getNationality() {
-        return Nationality.getText();
-    }
-
-    public String getAddress() {
-        return Address.getText();
-    }
-
-    // Go back to Dashboard
+    @FXML
     public void backToDashBoard(ActionEvent event) throws IOException {
-        FXMLLoader fxmlLoader2 = new FXMLLoader(Main.class.getResource("dashboard.fxml"));
-        Scene scene = new Scene(fxmlLoader2.load());
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("dashboard.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
 
-        Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+        DashboardController dashboardController = fxmlLoader.getController();
+        dashboardController.setUsername(username);
+
+        Stage stage = (Stage) Back.getScene().getWindow();
         stage.setTitle("Dashboard");
         stage.setScene(scene);
-        stage.show();
     }
 
-    public void savePersonalInfo(){
-        File file = new File(username + ".txt");
-
-       try(BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))){
-           writer.write("Firstname : " + getFirstname());
-           writer.newLine();
-           writer.write("Last name : " + getLastname());
-           writer.newLine();
-           writer.write("Email : " + getEmail());
-           writer.newLine();
-           writer.write("Phone : " + getPhone());
-           writer.newLine();
-           writer.write("Nationality : " + getNationality());
-           writer.newLine();
-           writer.write("Address : " +getAddress());
-           writer.newLine();
-           writer.write("-------------------------------------------------/n");
-       } catch(IOException e){
-           e.printStackTrace();
-       }
-    }
-
-
+    @FXML
     public void saveAndContinue(ActionEvent event) throws IOException {
+        // Hide any previous errors
+        label.setVisible(false);
 
-        System.out.println("Saving personal info for user: " + username);
-        System.out.println("First Name: " + getFirstname());
-        System.out.println("Last Name: " + getLastname());
-        System.out.println("Email: " + getEmail());
-        System.out.println("Phone: " + getPhone());
-        System.out.println("Nationality: " + getNationality());
-        System.out.println("Address: " + getAddress());
+        // Validate inputs
+        if (!validateInputs()) {
+            return;
+        }
 
+        // Save data to JSON
         savePersonalInfo();
 
-
+        // Navigate to Education screen
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Education.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
 
         EducationController educationController = fxmlLoader.getController();
         educationController.setUsername(username);
 
-        Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+        Stage stage = (Stage) SaveAndContinue.getScene().getWindow();
         stage.setTitle("Education");
         stage.setScene(scene);
-        stage.show();
+    }
+
+    private void savePersonalInfo() {
+        // Get the existing resume data
+        JSONObject resume = ResumeService.loadResume(username);
+
+        // Create personal info JSON object
+        JSONObject personal = new JSONObject();
+        personal.put("firstName", FirstName.getText().trim());
+        personal.put("lastName", LastName.getText().trim());
+        personal.put("email", Email.getText().trim());
+        personal.put("phone", Phone.getText().trim());
+        personal.put("nationality", Nationality.getText().trim());
+        personal.put("address", Address.getText().trim());
+
+        // Add personal info to resume
+        resume.put("personal", personal);
+
+        // Save to file
+        ResumeService.saveResume(username, resume);
     }
 }
