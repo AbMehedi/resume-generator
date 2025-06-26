@@ -14,18 +14,28 @@ import java.util.regex.Pattern;
 public class TemplateEngine {
     private static final String TEMPLATE_DIR = "src/main/resources/templates/";
 
-    public static String generateResume(JSONObject resumeData) throws IOException {
-        // Load the HTML template file
-        String templateContent = new String(Files.readAllBytes(
-                Paths.get(TEMPLATE_DIR + "project_template.html")
-        ));
+//    public static String generateResume(JSONObject resumeData) throws IOException {
+//        // Load the HTML template file
+//        String templateContent = new String(Files.readAllBytes(
+//                Paths.get(TEMPLATE_DIR + "project_template.html")
+//        ));
+//
+//        // Create data model with all resume sections
+//        Map<String, String> dataModel = createDataModel(resumeData);
+//
+//        // Replace placeholders with actual data
+//        return replacePlaceholders(templateContent, dataModel);
+//    }
+public static String generateResume(JSONObject resumeData) throws IOException {
+    // Load template file
+    String templateContent = Files.readString(Paths.get(TEMPLATE_DIR + "project_template.html"));
 
-        // Create data model with all resume sections
-        Map<String, String> dataModel = createDataModel(resumeData);
+    // Create data model
+    Map<String, String> dataModel = createDataModel(resumeData);
 
-        // Replace placeholders with actual data
-        return replacePlaceholders(templateContent, dataModel);
-    }
+    // Replace placeholders
+    return replacePlaceholders(templateContent, dataModel);
+}
 
     private static Map<String, String> createDataModel(JSONObject resume) {
         Map<String, String> model = new HashMap<>();

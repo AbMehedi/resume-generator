@@ -1,4 +1,3 @@
-// InterestsController.java
 package com.example.resumegen;
 
 import javafx.event.ActionEvent;
@@ -7,18 +6,19 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import com.itextpdf.html2pdf.ConverterProperties;
+import com.itextpdf.html2pdf.HtmlConverter;
 
+import java.awt.Desktop;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.awt.Desktop;
-import com.itextpdf.html2pdf.HtmlConverter;
 
 public class InterestsController {
     @FXML private ListView<String> interestsList;
@@ -37,6 +37,7 @@ public class InterestsController {
 
     private void loadInterests() {
         try {
+            interestsList.getItems().clear();
             JSONObject resume = ResumeService.loadResume(username);
             if (resume.has("interests")) {
                 JSONArray interests = resume.getJSONArray("interests");
@@ -107,19 +108,36 @@ public class InterestsController {
 
     private void generatePDF() {
         try {
+            // 1. Load resume data
             JSONObject resume = ResumeService.loadResume(username);
+
+            // 2. Generate HTML
             String html = TemplateEngine.generateResume(resume);
 
-            String pdfPath = username + "_resume.pdf";
-            HtmlConverter.convertToPdf(html, new FileOutputStream(pdfPath));
+            // 3. Save HTML to file
+            String htmlPath = HtmlSaver.saveHtml(html, username);
 
+            // 4. Define PDF path
+            String pdfPath = username + "_resume.pdf";
+
+            // 5. Convert HTML to PDF
+            ConverterProperties properties = new ConverterProperties();
+            try (FileOutputStream pdfStream = new FileOutputStream(pdfPath)) {
+                HtmlConverter.convertToPdf(html, pdfStream, properties);
+            }
+
+            // 6. Open PDF
             if (Desktop.isDesktopSupported()) {
                 Desktop.getDesktop().open(new File(pdfPath));
             }
 
-            showSuccessAlert("Resume Generated", "PDF saved to: " + pdfPath);
+            // 7. Show success message with HTML path
+            showSuccessAlert("Resume Generated",
+                    "HTML version saved to: " + htmlPath + "\n" +
+                            "PDF version saved to: " + pdfPath);
         } catch (Exception e) {
             showError("PDF Generation Failed: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 

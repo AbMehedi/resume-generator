@@ -65,13 +65,7 @@ public class EducationController {
         stage.setScene(scene);
     }
 
-    @FXML
-    public void SkillPage(ActionEvent event) throws IOException {
-        if (validateInputs()) {
-            saveEducationInfo();
-            navigateToSkillsPage(event);
-        }
-    }
+
 
     private boolean validateInputs() {
         // College validation
@@ -165,6 +159,14 @@ public class EducationController {
 
     @FXML
     private void navigateToSkillsPage(ActionEvent event) throws IOException {
+
+        if(!validateInputs()) {
+            return;
+        }
+
+
+        saveEducationInfo();
+
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Skills.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
 
