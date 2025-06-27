@@ -13,6 +13,7 @@ import org.json.JSONObject;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicReference;
 import javafx.concurrent.Task;
 
 public class InterestsController {
@@ -124,13 +125,16 @@ public class InterestsController {
         stage.setScene(scene);
     }
 
-
     @FXML
     public void generateResume() {
         saveInterests();
 
         // Disable button during generation
         generateButton.setDisable(true);
+        errorLabel.setVisible(false);
+
+        // Use AtomicReference to track PDF file
+        AtomicReference<File> pdfFileRef = new AtomicReference<>();
 
         Task<Void> generationTask = new Task<>() {
             @Override
@@ -150,21 +154,16 @@ public class InterestsController {
                 // 5. Convert HTML to PDF using PdfGenerator
                 PdfGenerator.generatePdf(htmlPath, pdfPath);
 
-                // 6. Store paths for UI update
-                updateMessage(htmlPath + "|" + pdfPath);
+                // 6. Create File reference
+                pdfFileRef.set(new File(pdfPath));
                 return null;
             }
         };
 
         generationTask.setOnSucceeded(e -> {
-            String[] paths = generationTask.getMessage().split("\\|");
-            String htmlPath = paths[0];
-            String pdfPath = paths[1];
-
-            try {
-                // Check if the PDF was generated successfully
-                File pdfFile = new File(pdfPath);
-                if (pdfFile.exists() && pdfFile.isFile()) {
+            File pdfFile = pdfFileRef.get();
+            if (pdfFile != null && pdfFile.exists()) {
+                try {
                     // Open the PDF automatically
                     if (Desktop.isDesktopSupported()) {
                         Desktop.getDesktop().open(pdfFile);
@@ -172,32 +171,35 @@ public class InterestsController {
 
                     // Show success message
                     showSuccessAlert("Resume Generated",
-                            "HTML version saved to: " + htmlPath + "\n" +
-                                    "PDF version saved to: " + pdfPath);
-                } else {
-                    // Handle the case where the PDF wasn't generated correctly
-                    showError("Error: PDF generation failed. The file doesn't exist.");
+                            "PDF version saved to: " + pdfFile.getAbsolutePath());
+                } catch (IOException ex) {
+                    showError("Error opening PDF: " + ex.getMessage());
+                    // Fallback: show file location
+                    showSuccessAlert("Resume Generated",
+                            "PDF saved to: " + pdfFile.getAbsolutePath() +
+                                    "\n\nCould not open automatically. Please open manually.");
                 }
-            } catch (Exception ex) {
-                showError("Error opening PDF: " + ex.getMessage());
-            } finally {
-                generateButton.setDisable(false);
+            } else {
+                showError("PDF generation failed: File not created");
             }
+            generateButton.setDisable(false);
         });
 
         generationTask.setOnFailed(e -> {
             generateButton.setDisable(false);
             Throwable ex = generationTask.getException();
             showError("PDF Generation Failed: " + ex.getMessage());
-            ex.printStackTrace();
+
+            // Show detailed error message
+            showErrorAlert("Generation Error",
+                    "Could not generate PDF: " + ex.getMessage() +
+                            "\n\nPlease check that Chrome is installed and the template is valid.");
         });
 
         new Thread(generationTask).start();
     }
 
-    // Modified showError method to ensure thread safety with Platform.runLater
     private void showError(String message) {
-        // Use Platform.runLater to ensure the UI update happens on the JavaFX Application Thread
         Platform.runLater(() -> {
             errorLabel.setText(message);
             errorLabel.setVisible(true);
@@ -205,14 +207,22 @@ public class InterestsController {
     }
 
     private void showSuccessAlert(String title, String message) {
-        // Use Platform.runLater for thread safety for success alert too
         Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle(title);
-            alert.setHeaderText(null);
+            alert.setHeaderText("Resume Generated Successfully");
             alert.setContentText(message);
             alert.showAndWait();
         });
     }
 
+    private void showErrorAlert(String title, String message) {
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle(title);
+            alert.setHeaderText("PDF Generation Failed");
+            alert.setContentText(message);
+            alert.showAndWait();
+        });
+    }
 }
