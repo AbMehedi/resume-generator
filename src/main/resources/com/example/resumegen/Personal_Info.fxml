@@ -11,9 +11,6 @@
 
 <AnchorPane minHeight="700.0" minWidth="886.0" prefHeight="722.0" prefWidth="886.0" styleClass="root" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.resumegen.Personal_InfoController">
 
-<!--   <stylesheets>-->
-<!--      <URL value="@style.css" />-->
-<!--   </stylesheets>-->
 
    <!-- Header -->
    <Label layoutX="20.0" layoutY="20.0" styleClass="header" text="Personal Information" underline="true" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0" />

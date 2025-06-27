@@ -27,7 +27,7 @@ public class InterestsController {
     private String username;
 
     @FXML
-    public void initialize() {
+    public void initialize() {//hello
         // Add auto-capitalization to interest field
         interestField.setTextFormatter(new TextFormatter<>(change -> {
             if (change.isAdded() || change.isReplaced()) {
