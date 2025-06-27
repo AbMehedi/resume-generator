@@ -7,16 +7,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --dark-bg: #121212;
-            --dark-card: #1e1e1e;
-            --dark-accent: #2d2d2d;
+            --light-bg: #f5f7fb;
+            --light-card: #ffffff;
+            --light-accent: #e8ebf0;
             --primary: #36459f;
             --primary-light: #4c5cb6;
-            --text-primary: #ffffff;
-            --text-secondary: #b0b0b0;
-            --success: #4ade80;
-            --warning: #fbbf24;
-            --danger: #f87171;
+            --text-primary: #333333;
+            --text-secondary: #666666;
         }
 
         * {
@@ -27,7 +24,7 @@
         }
 
         body {
-            background-color: var(--dark-bg);
+            background-color: var(--light-bg);
             color: var(--text-primary);
             line-height: 1.6;
             padding: 2rem;
@@ -40,10 +37,10 @@
         .resume-container {
             max-width: 1000px;
             width: 100%;
-            background: var(--dark-card);
+            background: var(--light-card);
             border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
             display: grid;
             grid-template-columns: 300px 1fr;
             animation: fadeIn 0.8s ease-out;
@@ -56,10 +53,11 @@
 
         /* Sidebar Styles */
         .sidebar {
-            background: linear-gradient(145deg, #1a1a1a, #151515);
-            padding: 2.5rem 1.5rem;
+            background: #f8fafd;
+            padding: 2rem 1.5rem;
             position: relative;
             overflow: hidden;
+            border-right: 1px solid var(--light-accent);
         }
 
         .sidebar::before {
@@ -71,27 +69,27 @@
             height: 150px;
             border-radius: 50%;
             background: var(--primary);
-            opacity: 0.1;
+            opacity: 0.08;
         }
 
         .profile {
             text-align: center;
-            margin-bottom: 2rem;
+            margin-bottom: 1.8rem;
             position: relative;
             z-index: 2;
         }
 
-        /* Updated Profile Picture Styles */
         .avatar {
-            width: 130px;
-            height: 130px;
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
             border: 4px solid var(--primary);
-            margin: 0 auto 1.5rem;
+            margin: 0 auto 1.2rem;
             display: flex;
             justify-content: center;
             align-items: center;
             overflow: hidden;
+            background: white;
         }
 
         .avatar-img {
@@ -100,62 +98,44 @@
             object-fit: cover;
         }
 
-        /*.avatar-initials {*/
-        /*    font-size: 3.5rem;*/
-        /*    color: white;*/
-        /*    font-weight: bold;*/
-        /*    background: linear-gradient(45deg, #3b82f6, #8b5cf6);*/
-        /*    width: 100%;*/
-        /*    height: 100%;*/
-        /*    display: flex;*/
-        /*    justify-content: center;*/
-        /*    align-items: center;*/
-        /*}*/
-
         .name {
-            font-size: 1.8rem;
+            font-size: 1.7rem;
             font-weight: 700;
-            margin-bottom: 0.25rem;
-            background: linear-gradient(90deg, var(--primary), var(--primary-light));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.2rem;
+            color: var(--primary);
         }
 
         .title {
             color: var(--text-secondary);
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: 400;
         }
 
         .contact-info {
-            margin-bottom: 2rem;
+            margin-bottom: 1.8rem;
         }
 
         .section-title {
-            font-size: 1.2rem;
+            font-size: 1.15rem;
             font-weight: 600;
-            margin-bottom: 1.5rem;
-            padding-bottom: 0.5rem;
+            margin-bottom: 1.2rem;
+            padding-bottom: 0.4rem;
             border-bottom: 2px solid var(--primary);
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            color: var(--primary);
         }
 
         .contact-item {
             display: flex;
             align-items: center;
-            margin-bottom: 1rem;
-            transition: transform 0.3s ease;
-        }
-
-        .contact-item:hover {
-            transform: translateX(5px);
+            margin-bottom: 0.9rem;
         }
 
         .contact-icon {
-            width: 32px;
-            height: 32px;
+            width: 30px;
+            height: 30px;
             background: var(--primary);
             border-radius: 50%;
             display: flex;
@@ -163,35 +143,38 @@
             align-items: center;
             margin-right: 0.8rem;
             flex-shrink: 0;
+            color: white;
         }
 
         .contact-text {
             color: var(--text-primary);
-            font-size: 0.9rem;
+            font-size: 0.88rem;
+            line-height: 1.4;
         }
 
         .skills-section {
-            margin-bottom: 2rem;
+            margin-bottom: 1.8rem;
         }
 
         .skill-item {
-            margin-bottom: 1.2rem;
+            margin-bottom: 1rem;
         }
 
         .skill-header {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.4rem;
         }
 
         .skill-name {
             font-weight: 500;
-            font-size: 0.9rem;
+            font-size: 0.88rem;
+            color: var(--text-primary);
         }
 
         .skill-bar {
-            height: 6px;
-            background: var(--dark-accent);
+            height: 5px;
+            background: var(--light-accent);
             border-radius: 3px;
             overflow: hidden;
         }
@@ -202,6 +185,10 @@
             border-radius: 3px;
         }
 
+        .languages-section {
+            margin-bottom: 0.5rem;
+        }
+
         .languages-section .skill-item {
             display: flex;
             align-items: center;
@@ -209,23 +196,24 @@
 
         /* Main Content Styles */
         .main-content {
-            padding: 2.5rem;
+            padding: 2.2rem;
+            background: white;
         }
 
         .about {
-            margin-bottom: 2rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 1px solid var(--dark-accent);
+            margin-bottom: 1.8rem;
+            padding-bottom: 1.2rem;
+            border-bottom: 1px solid var(--light-accent);
         }
 
         .about p {
             color: var(--text-secondary);
-            font-size: 1rem;
-            line-height: 1.7;
+            font-size: 0.95rem;
+            line-height: 1.65;
         }
 
         .section {
-            margin-bottom: 2rem;
+            margin-bottom: 1.8rem;
         }
 
         .timeline {
@@ -247,8 +235,11 @@
 
         .timeline-item {
             position: relative;
-            margin-bottom: 1.8rem;
+            margin-bottom: 1.5rem;
             padding-left: 1.5rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
         }
 
         .timeline-item::before {
@@ -260,67 +251,64 @@
             height: 12px;
             border-radius: 50%;
             background: var(--primary);
-            border: 2px solid var(--dark-card);
+            border: 2px solid var(--light-card);
             z-index: 2;
         }
 
         .timeline-header {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 0.3rem;
+            margin-bottom: 0.2rem;
             flex-wrap: wrap;
         }
 
         .timeline-title {
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             font-weight: 600;
             color: var(--text-primary);
         }
 
         .timeline-date {
             color: var(--primary);
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             font-weight: 500;
         }
 
         .timeline-subtitle {
             font-weight: 600;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.4rem;
             color: var(--primary);
-            font-size: 0.95rem;
+            font-size: 0.92rem;
         }
 
         .timeline-content {
             color: var(--text-secondary);
-            font-size: 0.9rem;
+            font-size: 0.88rem;
+            line-height: 1.5;
         }
 
         .timeline-content p {
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.4rem;
         }
 
         .education-item {
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.3rem;
         }
 
         .interests {
             display: flex;
             flex-wrap: wrap;
-            gap: 0.8rem;
-            margin-top: 0.5rem;
+            gap: 0.7rem;
+            margin-top: 0.4rem;
         }
 
         .interest-item {
-            padding: 0.4rem 0.9rem;
-            background: var(--primary);
+            padding: 0.35rem 0.8rem;
+            background: #eef1f9;
             border-radius: 20px;
-            font-size: 0.85rem;
-            transition: transform 0.3s ease;
-        }
-
-        .interest-item:hover {
-            transform: translateY(-3px);
-            background: var(--primary-light);
+            font-size: 0.82rem;
+            color: var(--primary);
+            border: 1px solid #d8e0f0;
         }
 
         /* Responsive Design */
@@ -331,7 +319,9 @@
 
             .sidebar {
                 text-align: center;
-                padding: 2rem 1rem;
+                padding: 1.8rem 1rem;
+                border-right: none;
+                border-bottom: 1px solid var(--light-accent);
             }
 
             .contact-item {
@@ -339,13 +329,9 @@
             }
 
             .avatar {
-                width: 110px;
-                height: 110px;
+                width: 100px;
+                height: 100px;
             }
-
-            /*.avatar-initials {*/
-            /*    font-size: 2.8rem;*/
-            /*}*/
         }
 
         @media (max-width: 480px) {
@@ -381,7 +367,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            box-shadow: 0 4px 15px rgba(74, 108, 247, 0.4);
+            box-shadow: 0 4px 15px rgba(54, 69, 159, 0.25);
             transition: all 0.3s ease;
             z-index: 100;
         }
@@ -389,7 +375,154 @@
         .print-button:hover {
             background: var(--primary-light);
             transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(74, 108, 247, 0.5);
+            box-shadow: 0 6px 20px rgba(54, 69, 159, 0.3);
+        }
+
+        /* PRINT STYLES - Ensures single page PDF */
+        @media print {
+            body {
+                padding: 0 !important;
+                margin: 0 !important;
+                background: white !important;
+                display: block;
+                min-height: auto;
+                width: 100%;
+            }
+
+            body * {
+                visibility: hidden;
+            }
+
+            .resume-container, .resume-container * {
+                visibility: visible;
+            }
+
+            .resume-container {
+                position: absolute;
+                left: 0;
+                top: 0;
+                max-width: 100% !important;
+                width: 100% !important;
+                box-shadow: none !important;
+                border-radius: 0 !important;
+                grid-template-columns: 270px 1fr !important;
+                animation: none !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                min-height: auto;
+                height: auto;
+                break-inside: avoid;
+            }
+
+            .print-button {
+                display: none !important;
+            }
+
+            .sidebar {
+                padding: 1.2rem 1rem !important;
+                border-right: 1px solid #e0e0e0 !important;
+                break-inside: avoid;
+                height: 100vh;
+            }
+
+            .main-content {
+                padding: 1.2rem !important;
+                break-inside: avoid;
+                height: 100vh;
+            }
+
+            .section-title {
+                margin-bottom: 1rem;
+            }
+
+            .timeline-item {
+                margin-bottom: 1rem !important;
+                page-break-inside: avoid;
+                opacity: 1 !important;
+                transform: none !important;
+            }
+
+            /* Adjust font sizes for print */
+            .name {
+                font-size: 1.5rem !important;
+            }
+
+            .title {
+                font-size: 0.85rem !important;
+            }
+
+            .contact-text, .skill-name, .timeline-content {
+                font-size: 0.8rem !important;
+            }
+
+            .about p, .timeline-title {
+                font-size: 0.92rem !important;
+            }
+
+            .section-title {
+                font-size: 1.1rem !important;
+            }
+
+            /* Prevent unnecessary page breaks */
+            .section {
+                page-break-inside: avoid;
+            }
+
+            /* Scale down profile picture */
+            .avatar {
+                width: 90px !important;
+                height: 90px !important;
+                margin-bottom: 0.8rem !important;
+            }
+
+            /* Ensure elements are visible in print */
+            .contact-icon,
+            .section-title i {
+                -webkit-print-color-adjust: exact !important;
+                color-adjust: exact !important;
+            }
+
+            /* Remove browser headers/footers */
+            @page {
+                margin: 0.5cm !important;
+                size: auto;
+            }
+
+            /* Hide URL and page numbers */
+            @page :left {
+                margin-left: 0;
+                margin-right: 0;
+            }
+
+            @page :first {
+                margin-top: 0;
+            }
+
+            /* Compact layout */
+            .about {
+                margin-bottom: 1.2rem !important;
+                padding-bottom: 0.8rem !important;
+            }
+
+            .section {
+                margin-bottom: 1.3rem !important;
+            }
+
+            .timeline-item {
+                margin-bottom: 1rem !important;
+            }
+
+            .education-item {
+                margin-bottom: 1rem !important;
+            }
+
+            .contact-item {
+                margin-bottom: 0.7rem !important;
+            }
+
+            .skill-item {
+                margin-bottom: 0.8rem !important;
+            }
         }
     </style>
 </head>
@@ -404,11 +537,6 @@
                 <img src="{{profilePicture}}" class="avatar-img" alt="Profile Picture">
             </div>
             {{/profilePicture}}
-<!--            {{^profilePicture}}-->
-<!--            <div class="avatar">-->
-<!--                <div class="avatar-initials">{{initials}}</div>-->
-<!--            </div>-->
-<!--            {{/profilePicture}}-->
 
             <h1 class="name">{{personal.firstName}} {{personal.lastName}}</h1>
             <div class="title">{{personal.jobTitle}}</div>
@@ -504,15 +632,32 @@
 </button>
 
 <script>
-    // Simple animation for timeline items
     document.addEventListener('DOMContentLoaded', function() {
         const timelineItems = document.querySelectorAll('.timeline-item');
 
+        // Apply animations to timeline items
         timelineItems.forEach((item, index) => {
             setTimeout(() => {
                 item.style.opacity = '1';
                 item.style.transform = 'translateY(0)';
             }, 200 * index);
+        });
+
+        // Prepare for printing
+        window.addEventListener('beforeprint', function() {
+            document.querySelectorAll('.timeline-item').forEach(item => {
+                item.style.opacity = '1';
+                item.style.transform = 'none';
+            });
+        });
+
+        // Hide print button when printing
+        window.matchMedia('print').addListener(mql => {
+            if (mql.matches) {
+                document.querySelector('.print-button').style.display = 'none';
+            } else {
+                document.querySelector('.print-button').style.display = 'flex';
+            }
         });
     });
 </script>
