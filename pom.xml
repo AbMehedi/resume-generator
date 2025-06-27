@@ -54,6 +54,8 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- PDF Handling (only for existing functionality) -->
         <dependency>
             <groupId>org.apache.pdfbox</groupId>
             <artifactId>pdfbox</artifactId>
@@ -74,13 +76,7 @@
             <version>0.4</version>
         </dependency>
 
-        <!-- PDF Generation -->
-        <dependency>
-            <groupId>com.itextpdf</groupId>
-            <artifactId>html2pdf</artifactId>
-            <version>4.0.4</version>
-        </dependency>
-        <!-- Add to dependencies section -->
+        <!-- ControlsFX for enhanced UI controls -->
         <dependency>
             <groupId>org.controlsfx</groupId>
             <artifactId>controlsfx</artifactId>

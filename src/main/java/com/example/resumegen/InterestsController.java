@@ -1,5 +1,6 @@
 package com.example.resumegen;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,13 +10,10 @@ import javafx.stage.Stage;
 import org.controlsfx.control.textfield.TextFields;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import com.itextpdf.html2pdf.ConverterProperties;
-import com.itextpdf.html2pdf.HtmlConverter;
-
 import java.awt.Desktop;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import javafx.concurrent.Task;
 
 public class InterestsController {
     @FXML private ListView<String> interestsList;
@@ -26,7 +24,6 @@ public class InterestsController {
     @FXML private Label errorLabel;
 
     private String username;
-
 
     @FXML
     public void initialize() {
@@ -127,57 +124,95 @@ public class InterestsController {
         stage.setScene(scene);
     }
 
+
     @FXML
     public void generateResume() {
         saveInterests();
-        generatePDF();
+
+        // Disable button during generation
+        generateButton.setDisable(true);
+
+        Task<Void> generationTask = new Task<>() {
+            @Override
+            protected Void call() throws Exception {
+                // 1. Load resume data
+                JSONObject resume = ResumeService.loadResume(username);
+
+                // 2. Generate HTML
+                String html = TemplateEngine.generateResume(resume);
+
+                // 3. Save HTML to file
+                String htmlPath = HtmlSaver.saveHtml(html, username);
+
+                // 4. Define PDF path
+                String pdfPath = htmlPath.replace(".html", ".pdf");
+
+                // 5. Convert HTML to PDF using PdfGenerator
+                PdfGenerator.generatePdf(htmlPath, pdfPath);
+
+                // 6. Store paths for UI update
+                updateMessage(htmlPath + "|" + pdfPath);
+                return null;
+            }
+        };
+
+        generationTask.setOnSucceeded(e -> {
+            String[] paths = generationTask.getMessage().split("\\|");
+            String htmlPath = paths[0];
+            String pdfPath = paths[1];
+
+            try {
+                // Check if the PDF was generated successfully
+                File pdfFile = new File(pdfPath);
+                if (pdfFile.exists() && pdfFile.isFile()) {
+                    // Open the PDF automatically
+                    if (Desktop.isDesktopSupported()) {
+                        Desktop.getDesktop().open(pdfFile);
+                    }
+
+                    // Show success message
+                    showSuccessAlert("Resume Generated",
+                            "HTML version saved to: " + htmlPath + "\n" +
+                                    "PDF version saved to: " + pdfPath);
+                } else {
+                    // Handle the case where the PDF wasn't generated correctly
+                    showError("Error: PDF generation failed. The file doesn't exist.");
+                }
+            } catch (Exception ex) {
+                showError("Error opening PDF: " + ex.getMessage());
+            } finally {
+                generateButton.setDisable(false);
+            }
+        });
+
+        generationTask.setOnFailed(e -> {
+            generateButton.setDisable(false);
+            Throwable ex = generationTask.getException();
+            showError("PDF Generation Failed: " + ex.getMessage());
+            ex.printStackTrace();
+        });
+
+        new Thread(generationTask).start();
     }
 
-    private void generatePDF() {
-        try {
-            // 1. Load resume data
-            JSONObject resume = ResumeService.loadResume(username);
-
-            // 2. Generate HTML
-            String html = TemplateEngine.generateResume(resume);
-
-            // 3. Save HTML to file
-            String htmlPath = HtmlSaver.saveHtml(html, username);
-
-            // 4. Define PDF path
-            String pdfPath = username + "_resume.pdf";
-
-            // 5. Convert HTML to PDF
-            ConverterProperties properties = new ConverterProperties();
-            try (FileOutputStream pdfStream = new FileOutputStream(pdfPath)) {
-                HtmlConverter.convertToPdf(html, pdfStream, properties);
-            }
-
-            // 6. Open PDF
-            if (Desktop.isDesktopSupported()) {
-                Desktop.getDesktop().open(new File(pdfPath));
-            }
-
-            // 7. Show success message with HTML path
-            showSuccessAlert("Resume Generated",
-                    "HTML version saved to: " + htmlPath + "\n" +
-                            "PDF version saved to: " + pdfPath);
-        } catch (Exception e) {
-            showError("PDF Generation Failed: " + e.getMessage());
-            e.printStackTrace();
-        }
+    // Modified showError method to ensure thread safety with Platform.runLater
+    private void showError(String message) {
+        // Use Platform.runLater to ensure the UI update happens on the JavaFX Application Thread
+        Platform.runLater(() -> {
+            errorLabel.setText(message);
+            errorLabel.setVisible(true);
+        });
     }
 
     private void showSuccessAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
+        // Use Platform.runLater for thread safety for success alert too
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle(title);
+            alert.setHeaderText(null);
+            alert.setContentText(message);
+            alert.showAndWait();
+        });
     }
 
-    private void showError(String message) {
-        errorLabel.setText(message);
-        errorLabel.setVisible(true);
-    }
 }
