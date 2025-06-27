@@ -7,48 +7,56 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="700.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.resumegen.Personal_InfoController">
+<AnchorPane minHeight="700.0" minWidth="463.0" prefHeight="722.0" prefWidth="886.0" styleClass="root" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.resumegen.Personal_InfoController">
+   <children>
+      <VBox layoutX="20.0" layoutY="20.0" prefWidth="760" spacing="20">
+         <Label styleClass="header" text="Personal Information" underline="true" />
 
-   <Label layoutX="35.0" layoutY="32.0" text="Personal Information" underline="true">
-      <font>
-         <Font name="Bell MT Bold" size="24.0" />
-      </font>
-   </Label>
+         <HBox alignment="TOP_LEFT" prefHeight="646.0" prefWidth="891.0" spacing="30" styleClass="root" stylesheets="@style.css">
+            <!-- Left Column -->
+            <VBox prefWidth="500" spacing="15">
+               <Label styleClass="form-label" text="First Name*" />
+               <TextField fx:id="FirstName" prefHeight="40.0" prefWidth="500.0" styleClass="text-field" />
 
-   <!-- Profile Picture Section -->
-   <Label layoutX="498.0" layoutY="185.0" text="Profile Picture" />
-   <HBox layoutX="35.0" layoutY="100.0" spacing="10.0" />
-   <Label fx:id="imageErrorLabel" layoutX="35.0" layoutY="210.0" style="-fx-text-fill: red;" visible="false" />
+               <Label styleClass="form-label" text="Last Name*" />
+               <TextField fx:id="LastName" prefHeight="40.0" prefWidth="500.0" styleClass="text-field" />
 
-   <!-- Personal Information Fields -->
-   <Label layoutX="34.0" layoutY="103.0" text="First Name*" />
-   <TextField fx:id="FirstName" layoutX="35.0" layoutY="121.0" prefWidth="250.0" />
+               <Label styleClass="form-label" text="Email*" />
+               <TextField fx:id="Email" prefHeight="40.0" prefWidth="500.0" styleClass="text-field" />
 
-   <Label layoutX="33.0" layoutY="162.0" text="Last Name*" />
-   <TextField fx:id="LastName" layoutX="35.0" layoutY="190.0" prefWidth="250.0" />
+               <HBox spacing="20">
+                  <VBox prefWidth="240" spacing="5">
+                     <Label styleClass="form-label" text="Phone" />
+                     <TextField fx:id="Phone" prefHeight="40.0" styleClass="text-field" />
+                  </VBox>
+                  <VBox prefWidth="240" spacing="5">
+                     <Label styleClass="form-label" text="Nationality" />
+                     <TextField fx:id="Nationality" prefHeight="40.0" styleClass="text-field" />
+                  </VBox>
+               </HBox>
 
-   <Label layoutX="35.0" layoutY="232.0" text="Email*" />
-   <TextField fx:id="Email" layoutX="35.0" layoutY="261.0" prefWidth="580.0" />
+               <Label styleClass="form-label" text="Address" />
+               <TextField fx:id="Address" prefHeight="40.0" prefWidth="500.0" styleClass="text-field" />
 
-   <Label layoutX="34.0" layoutY="303.0" text="Phone" />
-   <TextField fx:id="Phone" layoutX="35.0" layoutY="331.0" prefWidth="250.0" />
+               <Label styleClass="form-label" text="About Me*" />
+               <TextArea fx:id="AboutMe" prefHeight="150.0" prefWidth="500.0" promptText="Write a brief professional summary (at least 50 characters)" styleClass="text-area" wrapText="true" />
+            </VBox>
+      
+            <!-- Right Column - Profile Picture -->
+            <VBox alignment="TOP_CENTER" spacing="10">
+               <ImageView fx:id="profileImageView" fitHeight="150.0" fitWidth="150.0" preserveRatio="true" styleClass="profile-image" />
+               <Button fx:id="chooseImageButton" mnemonicParsing="false" onAction="#handleChooseImage" styleClass="secondary-button" text="Choose Image" />
+               <Label fx:id="imageErrorLabel" styleClass="error-label" visible="false" />
+               <Button fx:id="SaveAndContinue" mnemonicParsing="false" onAction="#saveAndContinue" styleClass="primary-button" text="Save &amp; Continue" />
+               <Button fx:id="Back" mnemonicParsing="false" onAction="#backToDashBoard" styleClass="secondary-button" text="Back" />
+            </VBox>
+         </HBox>
 
-   <Label layoutX="365.0" layoutY="303.0" text="Nationality" />
-   <TextField fx:id="Nationality" layoutX="364.0" layoutY="331.0" prefWidth="250.0" />
+         <Label fx:id="label" styleClass="error-label" visible="false" />
 
-   <Label layoutX="33.0" layoutY="373.0" text="Address" />
-   <TextField fx:id="Address" layoutX="35.0" layoutY="401.0" prefWidth="580.0" />
-
-   <Label layoutX="36.0" layoutY="437.0" text="About Me*" />
-   <TextArea fx:id="AboutMe" layoutX="36.0" layoutY="466.0" prefHeight="120.0" prefWidth="580.0" promptText="Write a brief professional summary (at least 50 characters)" wrapText="true" />
-
-   <Label fx:id="label" layoutX="284.0" layoutY="616.0" textFill="RED" visible="false" />
-
-   <Button fx:id="Back" layoutX="34.0" layoutY="612.0" mnemonicParsing="false" onAction="#backToDashBoard" text="Back" />
-
-   <Button fx:id="SaveAndContinue" layoutX="510.0" layoutY="612.0" mnemonicParsing="false" onAction="#saveAndContinue" text="Save &amp; Continue" />
-   <ImageView fx:id="profileImageView" fitHeight="100.0" fitWidth="100.0" layoutX="485.0" layoutY="62.0" preserveRatio="true" />
-   <Button fx:id="chooseImageButton" layoutX="489.0" layoutY="215.0" mnemonicParsing="false" onAction="#handleChooseImage" text="Choose Image" />
+         <HBox alignment="BOTTOM_RIGHT" prefWidth="760" spacing="20" />
+      </VBox>
+   </children>
 </AnchorPane>

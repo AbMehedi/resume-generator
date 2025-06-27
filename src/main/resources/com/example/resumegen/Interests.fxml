@@ -6,31 +6,32 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/17.0.2-ea"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.example.resumegen.InterestsController"
-            prefHeight="500.0" prefWidth="600.0">
+<AnchorPane minHeight="700.0" minWidth="900.0" prefHeight="700.0" prefWidth="900.0" styleClass="root" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.resumegen.InterestsController">
+    <children>
+        <VBox layoutX="20.0" layoutY="20.0" prefWidth="660" spacing="20">
+            <Label styleClass="header" text="Interests" underline="true" />
 
-    <Label layoutX="35.0" layoutY="32.0" text="Interests" underline="true">
-        <font>
-            <Font name="Bell MT Bold" size="24.0" />
-        </font>
-    </Label>
+            <VBox spacing="10">
+                <Label styleClass="form-label" text="Add your interests and hobbies:" />
+                <HBox spacing="10.0">
+                    <TextField fx:id="interestField" prefWidth="500.0" promptText="Enter interest" styleClass="text-field" />
+                    <Button fx:id="addButton" mnemonicParsing="false" onAction="#addInterest" styleClass="secondary-button" text="Add" />
+                </HBox>
+            </VBox>
 
-    <HBox layoutX="50.0" layoutY="70.0" spacing="10.0">
-        <TextField fx:id="interestField" promptText="Enter interest" prefWidth="350.0"/>
-        <Button fx:id="addButton" mnemonicParsing="false" onAction="#addInterest" text="Add"/>
-    </HBox>
+            <VBox spacing="5">
+                <Label styleClass="form-label" text="Your Interests:" />
+                <ListView fx:id="interestsList" prefHeight="200.0" prefWidth="660.0" styleClass="list-view" />
+            </VBox>
 
-    <ListView fx:id="interestsList" layoutX="50.0" layoutY="110.0" prefHeight="250.0" prefWidth="500.0"/>
+            <Label fx:id="errorLabel" styleClass="error-label" visible="false" />
 
-    <Label fx:id="errorLabel" layoutX="50.0" layoutY="370.0" textFill="RED" visible="false" />
-
-    <Button fx:id="backButton" layoutX="40.0" layoutY="420.0" mnemonicParsing="false"
-            onAction="#backToLanguages" text="Back"/>
-
-    <Button fx:id="generateButton" layoutX="465.0" layoutY="420.0" mnemonicParsing="false"
-            onAction="#generateResume" text="Generate PDF"/>
+            <HBox alignment="BOTTOM_RIGHT" prefWidth="660" spacing="20">
+                <Button fx:id="backButton" mnemonicParsing="false" onAction="#backToLanguages" styleClass="secondary-button" text="Back" />
+                <Button fx:id="generateButton" mnemonicParsing="false" onAction="#generateResume" styleClass="primary-button" text="Generate PDF" />
+            </HBox>
+        </VBox>
+    </children>
 </AnchorPane>

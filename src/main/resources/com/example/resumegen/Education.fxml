@@ -4,35 +4,64 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.resumegen.EducationController">
+<AnchorPane minHeight="700.0" minWidth="900.0" prefHeight="700.0" prefWidth="900.0" styleClass="root" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.resumegen.EducationController">
    <children>
-      <Label layoutX="45.0" layoutY="33.0" text="Educational Qualification" underline="true">
-         <font>
-            <Font name="Bell MT Bold" size="24.0" />
-         </font>
-      </Label>
-      <Label layoutX="45.0" layoutY="109.0" text="College/ University Name" />
-      <Label layoutX="45.0" layoutY="145.0" text="Name of Degree" />
-      <Label layoutX="282.0" layoutY="145.0" prefHeight="18.0" prefWidth="66.0" text="Passing Year" />
-      <Label layoutX="465.0" layoutY="145.0" text="CGPA" />
-      <Label layoutX="45.0" layoutY="76.0" text="1." />
-      <Label fx:id="label" layoutX="45.0" layoutY="370.0" textFill="RED" visible="false" />
-      <TextField fx:id="CollegeName" layoutX="200.0" layoutY="105.0" prefHeight="26.0" prefWidth="370.0" />
-      <TextField fx:id="College_Degree" layoutX="148.0" layoutY="141.0" prefHeight="26.0" prefWidth="125.0" />
-      <TextField fx:id="College_PassingYear" layoutX="356.0" layoutY="140.0" prefHeight="26.0" prefWidth="88.0" />
-      <TextField fx:id="College_CGPA" layoutX="504.0" layoutY="140.0" prefHeight="26.0" prefWidth="66.0" />
-      <Label layoutX="45.0" layoutY="211.0" text="2." />
-      <Label layoutX="45.0" layoutY="250.0" text="College/ University Name" />
-      <Label layoutX="45.0" layoutY="293.0" text="Name of Degree" />
-      <Label layoutX="286.0" layoutY="293.0" text=" Passing Year" />
-      <Label layoutX="466.0" layoutY="293.0" text="CGPA" />
-      <TextField fx:id="University_Name" layoutX="199.0" layoutY="246.0" prefHeight="26.0" prefWidth="370.0" />
-      <TextField fx:id="University_Degree" layoutX="148.0" layoutY="289.0" prefHeight="26.0" prefWidth="126.0" />
-      <TextField fx:id="University_CGPA" layoutX="504.0" layoutY="288.0" prefHeight="26.0" prefWidth="66.0" />
-      <TextField fx:id="University_PassingYear" layoutX="360.0" layoutY="289.0" prefHeight="26.0" prefWidth="88.0" />
-      <Button fx:id="Back" layoutX="45.0" layoutY="340.0" mnemonicParsing="false" onAction="#backToPersonalInfo" text="Back" />
-      <Button fx:id="SaveAndContinue" layoutX="455.0" layoutY="340.0" mnemonicParsing="false" onAction="#navigateToSkillsPage" text="Save And Continue" />
+      <Label layoutX="20.0" layoutY="20.0" styleClass="header" text="Educational Qualification" underline="true" />
+
+      <VBox layoutX="20.0" layoutY="60.0" prefWidth="660" spacing="20">
+         <!-- College Section -->
+         <VBox spacing="10">
+            <Label styleClass="subheader" text="1. College/University Education" />
+            <Label styleClass="form-label" text="College/ University Name" />
+            <TextField fx:id="CollegeName" prefHeight="35.0" prefWidth="660.0" styleClass="text-field" />
+
+            <HBox spacing="20">
+               <VBox prefWidth="200" spacing="5">
+                  <Label styleClass="form-label" text="Name of Degree" />
+                  <TextField fx:id="College_Degree" prefHeight="35.0" styleClass="text-field" />
+               </VBox>
+               <VBox prefWidth="150" spacing="5">
+                  <Label styleClass="form-label" text="Passing Year" />
+                  <TextField fx:id="College_PassingYear" prefHeight="35.0" styleClass="text-field" />
+               </VBox>
+               <VBox prefWidth="150" spacing="5">
+                  <Label styleClass="form-label" text="CGPA" />
+                  <TextField fx:id="College_CGPA" prefHeight="35.0" styleClass="text-field" />
+               </VBox>
+            </HBox>
+         </VBox>
+
+         <!-- University Section -->
+         <VBox spacing="10">
+            <Label styleClass="subheader" text="2. Additional Education" />
+            <Label styleClass="form-label" text="College/ University Name" />
+            <TextField fx:id="University_Name" prefHeight="35.0" prefWidth="660.0" styleClass="text-field" />
+
+            <HBox spacing="20">
+               <VBox prefWidth="200" spacing="5">
+                  <Label styleClass="form-label" text="Name of Degree" />
+                  <TextField fx:id="University_Degree" prefHeight="35.0" styleClass="text-field" />
+               </VBox>
+               <VBox prefWidth="150" spacing="5">
+                  <Label styleClass="form-label" text="Passing Year" />
+                  <TextField fx:id="University_PassingYear" prefHeight="35.0" styleClass="text-field" />
+               </VBox>
+               <VBox prefWidth="150" spacing="5">
+                  <Label styleClass="form-label" text="CGPA" />
+                  <TextField fx:id="University_CGPA" prefHeight="35.0" styleClass="text-field" />
+               </VBox>
+            </HBox>
+         </VBox>
+
+         <Label fx:id="label" styleClass="error-label" visible="false" />
+
+         <HBox alignment="BOTTOM_RIGHT" prefWidth="660" spacing="20">
+            <Button fx:id="Back" mnemonicParsing="false" onAction="#backToPersonalInfo" styleClass="secondary-button" text="Back" />
+            <Button fx:id="SaveAndContinue" mnemonicParsing="false" onAction="#navigateToSkillsPage" styleClass="primary-button" text="Save And Continue" />
+         </HBox>
+      </VBox>
    </children>
 </AnchorPane>

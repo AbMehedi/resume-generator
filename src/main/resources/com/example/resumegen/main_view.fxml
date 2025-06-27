@@ -1,71 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.effect.Blend?>
-<?import javafx.scene.effect.Glow?>
-<?import javafx.scene.effect.InnerShadow?>
-<?import javafx.scene.effect.Reflection?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane cache="true" cacheHint="QUALITY" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="442.0" prefWidth="588.0" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.resumegen.LoginController">
+<AnchorPane prefWidth="900.0" prefHeight="700.0"
+            minWidth="900.0" minHeight="700.0"
+            styleClass="root" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.resumegen.LoginController">
+
    <children>
-      <ImageView fitHeight="442.0" fitWidth="277.0" layoutX="-7.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../../../background.jpg" />
-         </image>
-         <effect>
-            <Blend />
-         </effect>
-      </ImageView>
-      <Text layoutX="388.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0" text="User Login" wrappingWidth="119.71368408203125">
-         <font>
-            <Font name="Poor Richard" size="28.0" />
-         </font>
-      </Text>
-      <Text layoutX="354.0" layoutY="117.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Hey, Enter your details to sign into your account" textAlignment="CENTER" wrappingWidth="186.13671875">
-         <font>
-            <Font name="Pristina" size="16.0" />
-         </font>
-      </Text>
-      <TextField fx:id="Username" layoutX="330.0" layoutY="154.0" prefHeight="36.0" prefWidth="232.0" promptText="Enter Username or Email address">
-         <effect>
-            <Glow level="0.0" />
-         </effect>
-      </TextField>
-      <Button fx:id="loginButton" alignment="BOTTOM_CENTER" blendMode="SRC_ATOP" cache="true" contentDisplay="RIGHT" graphicTextGap="0.0" layoutX="329.0" layoutY="257.0" lineSpacing="10.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onAction="#LoginHandler" opacity="0.98" prefHeight="26.0" prefWidth="232.0" stylesheets="@../../../style.css" text="Login" textOverrun="CLIP">
-         <font>
-            <Font name="System Bold" size="15.0" />
-         </font>
-         <opaqueInsets>
-            <Insets />
-         </opaqueInsets>
-         <cursor>
-            <Cursor fx:constant="DEFAULT" />
-         </cursor>
-         <effect>
-            <InnerShadow>
-               <input>
-                  <Reflection />
-               </input>
-            </InnerShadow>
-         </effect>
-      </Button>
-      <Text layoutX="368.0" layoutY="381.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Don't have an account?" wrappingWidth="159.7366943359375">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Text>
-      <Label fx:id="label" layoutX="416.0" layoutY="335.0" text="Label" textFill="#e70202" />
-      <Button fx:id="button" layoutX="404.0" layoutY="392.0" mnemonicParsing="false" onAction="#SignupbuttonHandler" text="Click Here" />
-      <PasswordField fx:id="Password" layoutX="329.0" layoutY="203.0" prefHeight="36.0" prefWidth="232.0" promptText="Enter Password" />
+      <HBox prefHeight="500.0" prefWidth="800.0">
+         <!-- Left Side - Image -->
+         <ImageView fitHeight="500.0" fitWidth="350.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+               <Image url="@../../../background.jpg" />
+            </image>
+         </ImageView>
+
+         <!-- Right Side - Login Form -->
+         <VBox alignment="CENTER" prefWidth="450" spacing="20" style="-fx-padding: 40;" stylesheets="@style.css">
+            <Text styleClass="header" text="User Login" />
+            <Text styleClass="subheader" text="Hey, Enter your details to sign into your account" />
+
+            <VBox prefWidth="300" spacing="15">
+               <TextField fx:id="Username" prefHeight="40.0" prefWidth="300.0" promptText="Enter Username or Email address" styleClass="text-field" />
+               <PasswordField fx:id="Password" prefHeight="40.0" prefWidth="300.0" promptText="Enter Password" styleClass="password-field" />
+            </VBox>
+
+            <Button fx:id="loginButton" mnemonicParsing="false" onAction="#LoginHandler" prefWidth="300" styleClass="primary-button" text="Login" />
+
+            <Label fx:id="label" styleClass="error-label" text=" " visible="true" />
+
+            <HBox alignment="CENTER" spacing="5">
+               <Text text="Don't have an account?" />
+               <Button fx:id="button" mnemonicParsing="false" onAction="#SignupbuttonHandler" styleClass="secondary-button" text="Sign Up" />
+            </HBox>
+         </VBox>
+      </HBox>
    </children>
 </AnchorPane>
