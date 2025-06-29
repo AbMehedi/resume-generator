@@ -13,7 +13,6 @@ import org.json.JSONObject;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicReference;
 import javafx.concurrent.Task;
 
 public class InterestsController {
@@ -27,7 +26,7 @@ public class InterestsController {
     private String username;
 
     @FXML
-    public void initialize() {//hello
+    public void initialize() {
         // Add auto-capitalization to interest field
         interestField.setTextFormatter(new TextFormatter<>(change -> {
             if (change.isAdded() || change.isReplaced()) {
@@ -131,75 +130,71 @@ public class InterestsController {
 
         // Disable button during generation
         generateButton.setDisable(true);
-        errorLabel.setVisible(false);
-
-        // Use AtomicReference to track PDF file
-        AtomicReference<File> pdfFileRef = new AtomicReference<>();
 
         Task<Void> generationTask = new Task<>() {
             @Override
             protected Void call() throws Exception {
-                // 1. Load resume data
-                JSONObject resume = ResumeService.loadResume(username);
+                // Use the ResumeGenerator class to handle generation and email sending
+                ResumeGenerator resumeGenerator = new ResumeGenerator(username);
+                resumeGenerator.generateAndSend();
 
-                // 2. Generate HTML
-                String html = TemplateEngine.generateResume(resume);
-
-                // 3. Save HTML to file
-                String htmlPath = HtmlSaver.saveHtml(html, username);
-
-                // 4. Define PDF path
-                String pdfPath = htmlPath.replace(".html", ".pdf");
-
-                // 5. Convert HTML to PDF using PdfGenerator
-                PdfGenerator.generatePdf(htmlPath, pdfPath);
-
-                // 6. Create File reference
-                pdfFileRef.set(new File(pdfPath));
+                updateMessage(
+                        resumeGenerator.getHtmlPath() + "|" +
+                                resumeGenerator.getPdfPath() + "|" +
+                                resumeGenerator.getUserEmail()
+                );
                 return null;
             }
         };
 
         generationTask.setOnSucceeded(e -> {
-            File pdfFile = pdfFileRef.get();
-            if (pdfFile != null && pdfFile.exists()) {
-                try {
+            String[] parts = generationTask.getMessage().split("\\|");
+            String htmlPath = parts[0];
+            String pdfPath = parts[1];
+            String userEmail = parts[2];
+
+            try {
+                // Check if the PDF was generated successfully
+                File pdfFile = new File(pdfPath);
+                if (pdfFile.exists() && pdfFile.isFile()) {
                     // Open the PDF automatically
                     if (Desktop.isDesktopSupported()) {
                         Desktop.getDesktop().open(pdfFile);
                     }
 
                     // Show success message
-                    showSuccessAlert("Resume Generated",
-                            "PDF version saved to: " + pdfFile.getAbsolutePath());
-                } catch (IOException ex) {
-                    showError("Error opening PDF: " + ex.getMessage());
-                    // Fallback: show file location
-                    showSuccessAlert("Resume Generated",
-                            "PDF saved to: " + pdfFile.getAbsolutePath() +
-                                    "\n\nCould not open automatically. Please open manually.");
+                    String successMessage = "HTML version saved to: " + htmlPath + "\n" +
+                            "PDF version saved to: " + pdfPath;
+
+                    if (!userEmail.isEmpty()) {
+                        successMessage = "Resume has been sent to " + userEmail + "\n" + successMessage;
+                    }
+
+                    showSuccessAlert("Resume Generated", successMessage);
+                } else {
+                    // Handle the case where the PDF wasn't generated correctly
+                    showError("Error: PDF generation failed. The file doesn't exist.");
                 }
-            } else {
-                showError("PDF generation failed: File not created");
+            } catch (Exception ex) {
+                showError("Error opening PDF: " + ex.getMessage());
+            } finally {
+                generateButton.setDisable(false);
             }
-            generateButton.setDisable(false);
         });
 
         generationTask.setOnFailed(e -> {
             generateButton.setDisable(false);
             Throwable ex = generationTask.getException();
-            showError("PDF Generation Failed: " + ex.getMessage());
-
-            // Show detailed error message
-            showErrorAlert("Generation Error",
-                    "Could not generate PDF: " + ex.getMessage() +
-                            "\n\nPlease check that Chrome is installed and the template is valid.");
+            showError("Resume Generation Failed: " + ex.getMessage());
+            ex.printStackTrace();
         });
 
         new Thread(generationTask).start();
     }
 
+    // Modified showError method to ensure thread safety with Platform.runLater
     private void showError(String message) {
+        // Use Platform.runLater to ensure the UI update happens on the JavaFX Application Thread
         Platform.runLater(() -> {
             errorLabel.setText(message);
             errorLabel.setVisible(true);
@@ -207,20 +202,11 @@ public class InterestsController {
     }
 
     private void showSuccessAlert(String title, String message) {
+        // Use Platform.runLater for thread safety for success alert too
         Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle(title);
-            alert.setHeaderText("Resume Generated Successfully");
-            alert.setContentText(message);
-            alert.showAndWait();
-        });
-    }
-
-    private void showErrorAlert(String title, String message) {
-        Platform.runLater(() -> {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle(title);
-            alert.setHeaderText("PDF Generation Failed");
+            alert.setHeaderText(null);
             alert.setContentText(message);
             alert.showAndWait();
         });
