@@ -8,7 +8,7 @@
 
 <AnchorPane minHeight="700.0" minWidth="900.0" prefHeight="700.0" prefWidth="900.0" styleClass="root" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.resumegen.SkillsController">
    <children>
-      <VBox layoutX="20.0" layoutY="20.0" prefWidth="660" spacing="20">
+      <VBox layoutX="14.0" layoutY="22.0" prefHeight="656.0" prefWidth="858.0" spacing="20">
          <Label styleClass="header" text="Skills" underline="true" />
 
          <VBox spacing="10">
@@ -19,7 +19,7 @@
 
          <Label fx:id="label" styleClass="error-label" visible="false" />
 
-         <HBox alignment="BOTTOM_RIGHT" prefWidth="660" spacing="20">
+         <HBox alignment="BOTTOM_RIGHT" prefHeight="434.0" prefWidth="650.0" spacing="20">
             <Button fx:id="Back" mnemonicParsing="false" onAction="#backToEducationPage" styleClass="secondary-button" text="Back" />
             <Button fx:id="SaveAndContinue" mnemonicParsing="false" onAction="#Experience" styleClass="primary-button" text="Save &amp; Continue" />
          </HBox>

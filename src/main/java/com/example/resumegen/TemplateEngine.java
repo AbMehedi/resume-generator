@@ -57,6 +57,9 @@ public class TemplateEngine {
             } else {
                 model.put("personal.jobTitle", "Professional");
             }
+            if (personal.has("nationality")) {
+                model.put("personal.nationality", escapeHtml(personal.getString("nationality")));
+            }
 
             // Process About Me section
             if (personal.has("aboutMe")) {

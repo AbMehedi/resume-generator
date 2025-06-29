@@ -115,7 +115,6 @@
             margin-bottom: 1.8rem;
         }
 
-
         .section-title {
             font-size: 1.15rem;
             font-weight: 600;
@@ -130,17 +129,8 @@
 
         .contact-item {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             margin-bottom: 0.9rem;
-        }
-        .contact-item {
-            display: flex;
-            align-items: flex-start; /* Align items to top */
-        }
-
-        .contact-text {
-            flex: 1; /* Take remaining space */
-            word-break: break-word; /* Handle long text */
         }
 
         .contact-icon {
@@ -160,6 +150,8 @@
             color: var(--text-primary);
             font-size: 0.88rem;
             line-height: 1.4;
+            flex: 1;
+            word-break: break-word;
         }
 
         .skills-section {
@@ -328,14 +320,22 @@
             }
 
             .sidebar {
-                text-align: center;
+                text-align: left;
                 padding: 1.8rem 1rem;
                 border-right: none;
                 border-bottom: 1px solid var(--light-accent);
             }
 
+            .profile {
+                text-align: center;
+            }
+
+            .contact-info, .skills-section, .languages-section {
+                text-align: left;
+            }
+
             .contact-item {
-                justify-content: center;
+                justify-content: flex-start;
             }
 
             .avatar {
@@ -604,6 +604,13 @@
                     <i class="fas fa-map-marker-alt"></i>
                 </div>
                 <div class="contact-text">{{personal.address}}</div>
+            </div>
+
+            <div class="contact-item">
+                <div class="contact-icon">
+                    <i class="fas fa-globe"></i>
+                </div>
+                <div class="contact-text">{{personal.nationality}}</div>
             </div>
         </div>
 
