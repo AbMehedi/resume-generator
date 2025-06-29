@@ -14,6 +14,10 @@ import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.json.JSONObject;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -97,6 +101,36 @@ public class Personal_InfoController {
             return change;
         }));
     }
+    private BufferedImage resizeImage(BufferedImage originalImage, int targetWidth, int targetHeight) {
+        // Calculate new dimensions while maintaining aspect ratio
+        int originalWidth = originalImage.getWidth();
+        int originalHeight = originalImage.getHeight();
+        double aspectRatio = (double) originalWidth / originalHeight;
+
+        int newWidth = targetWidth;
+        int newHeight = targetHeight;
+
+        if (originalWidth > originalHeight) {
+            newHeight = (int) (targetWidth / aspectRatio);
+        } else {
+            newWidth = (int) (targetHeight * aspectRatio);
+        }
+
+        // Create new image with calculated dimensions
+        BufferedImage resizedImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g = resizedImage.createGraphics();
+
+        // Configure rendering quality
+        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+        // Draw the resized image
+        g.drawImage(originalImage, 0, 0, newWidth, newHeight, null);
+        g.dispose();
+
+        return resizedImage;
+    }
 
 
     private void loadPersonalInfo() {
@@ -154,14 +188,19 @@ public class Personal_InfoController {
     }
 
     private String convertImageToBase64(File file) throws IOException {
-        try (FileInputStream imageStream = new FileInputStream(file);
-             ByteArrayOutputStream byteStream = new ByteArrayOutputStream()) {
-
-            byte[] buffer = new byte[4096];
-            int bytesRead;
-            while ((bytesRead = imageStream.read(buffer)) != -1) {
-                byteStream.write(buffer, 0, bytesRead);
+        try (FileInputStream imageStream = new FileInputStream(file)) {
+            // Read original image
+            BufferedImage original = ImageIO.read(imageStream);
+            if (original == null) {
+                throw new IOException("Unsupported image format");
             }
+
+            // Resize image to max 150x150
+            BufferedImage resized = resizeImage(original, 400, 400);
+
+            // Convert to JPEG with compression
+            ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+            ImageIO.write(resized, "jpg", byteStream);
 
             return Base64.getEncoder().encodeToString(byteStream.toByteArray());
         }
