@@ -102,7 +102,7 @@ public class EducationController {
                 return false;
             }
             if (!isValidGPA(College_CGPA.getText())) {
-                showError("Invalid college CGPA (0.0-4.0)");
+                showError("Invalid college CGPA (0.0-5.0)");
                 return false;
             }
         }
@@ -118,7 +118,7 @@ public class EducationController {
                 return false;
             }
             if (!isValidGPA(University_CGPA.getText())) {
-                showError("Invalid university CGPA (0.0-4.0)");
+                showError("Invalid university CGPA (0.0-5.0)");
                 return false;
             }
         }
@@ -140,7 +140,7 @@ public class EducationController {
         if (gpa.isBlank()) return false;
         try {
             double gpaValue = Double.parseDouble(gpa);
-            return gpaValue >= 0.0 && gpaValue <= 4.0;
+            return gpaValue >= 0.0 && gpaValue <= 5.0; //pranto
         } catch (NumberFormatException e) {
             return false;
         }

@@ -11,28 +11,30 @@
 
 <AnchorPane minHeight="700.0" minWidth="900.0" prefHeight="700.0" prefWidth="900.0" styleClass="root" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.resumegen.LanguagesController">
     <children>
-        <VBox layoutX="20.0" layoutY="20.0" prefWidth="660" spacing="20">
+        <VBox layoutX="20.0" layoutY="20.0" prefWidth="860" spacing="20" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
             <Label styleClass="header" text="Languages" underline="true" />
 
-            <VBox spacing="10">
-                <Label styleClass="form-label" text="Add languages you speak:" />
-                <HBox spacing="10.0">
-                    <TextField fx:id="languageField" prefWidth="250.0" promptText="Language" styleClass="text-field" />
-                    <ComboBox fx:id="proficiencyComboBox" prefWidth="200.0" styleClass="combo-box" />
-                    <Button fx:id="addButton" mnemonicParsing="false" onAction="#addLanguage" styleClass="secondary-button" text="Add" />
-                </HBox>
+            <VBox spacing="20" styleClass="form-container">
+                <VBox spacing="10">
+                    <Label styleClass="form-label" text="Add languages you speak:" />
+                    <HBox alignment="CENTER_LEFT" spacing="10.0">
+                        <TextField fx:id="languageField" prefHeight="40.0" prefWidth="250.0" promptText="Language" styleClass="text-field" />
+                        <ComboBox fx:id="proficiencyComboBox" prefHeight="40.0" prefWidth="200.0" styleClass="combo-box" />
+                        <Button fx:id="addButton" minWidth="100" mnemonicParsing="false" onAction="#addLanguage" styleClass="secondary-button" text="Add" />
+                    </HBox>
+                </VBox>
+
+                <VBox spacing="5">
+                    <Label styleClass="form-label" text="Your Languages:" />
+                    <ListView fx:id="languagesList" prefHeight="200.0" prefWidth="820.0" styleClass="list-view" />
+                </VBox>
+
+                <Label fx:id="errorLabel" styleClass="error-label" visible="false" />
             </VBox>
 
-            <VBox spacing="5">
-                <Label styleClass="form-label" text="Your Languages:" />
-                <ListView fx:id="languagesList" prefHeight="200.0" prefWidth="660.0" styleClass="list-view" />
-            </VBox>
-
-            <Label fx:id="errorLabel" styleClass="error-label" visible="false" />
-
-            <HBox alignment="BOTTOM_RIGHT" prefWidth="660" spacing="20">
-                <Button fx:id="backButton" mnemonicParsing="false" onAction="#backToExperience" styleClass="secondary-button" text="Back" />
-                <Button fx:id="nextButton" mnemonicParsing="false" onAction="#goToInterests" styleClass="primary-button" text="Save &amp; Continue" />
+            <HBox alignment="BOTTOM_RIGHT" prefHeight="140.0" prefWidth="860.0" spacing="20">
+                <Button fx:id="backButton" minWidth="120" mnemonicParsing="false" onAction="#backToExperience" styleClass="secondary-button" text="Back" />
+                <Button fx:id="nextButton" minWidth="160" mnemonicParsing="false" onAction="#goToInterests" styleClass="primary-button" text="Save &amp; Continue" />
             </HBox>
         </VBox>
     </children>

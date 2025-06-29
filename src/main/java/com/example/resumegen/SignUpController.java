@@ -66,6 +66,10 @@ public class SignUpController {
             showError("Passwords do not match");
             return;
         }
+        if(getPassword().length() < 6) {
+            showError("Password must be at least 6 characters");
+            return;
+        }
 
         if (!isValidEmail(getEmail())) {
             showError("Invalid email format (must contain '@' and '.')");

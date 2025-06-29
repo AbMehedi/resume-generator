@@ -2,10 +2,8 @@ package com.example.resumegen;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -15,9 +13,9 @@ public class TemplateEngine {
     private static final String TEMPLATE_DIR = "src/main/resources/templates/";
 
     public static String generateResume(JSONObject resumeData) throws IOException {
-        // Load template file
-        String templateContent = Files.readString(Paths.get(TEMPLATE_DIR + "project_template.html"));
-
+        String templateContent = new String(
+                TemplateEngine.class.getResourceAsStream("/templates/project_template.html").readAllBytes()
+        );
         // Create data model
         Map<String, String> dataModel = createDataModel(resumeData);
 
@@ -58,6 +56,9 @@ public class TemplateEngine {
                 model.put("personal.jobTitle", escapeHtml(personal.getString("jobTitle")));
             } else {
                 model.put("personal.jobTitle", "Professional");
+            }
+            if (personal.has("nationality")) {
+                model.put("personal.nationality", escapeHtml(personal.getString("nationality")));
             }
 
             // Process About Me section
@@ -140,8 +141,8 @@ public class TemplateEngine {
             JSONObject exp = resume.getJSONObject("experience");
             StringBuilder experienceHtml = new StringBuilder();
 
-            addExperienceItem(experienceHtml, exp, "company1", "jobTitle1", "jobDescription1");
-            addExperienceItem(experienceHtml, exp, "company2", "jobTitle2", "jobDescription2");
+            addExperienceItem(experienceHtml, exp, "company1", "jobTitle1", "jobDescription1", "startYear1", "endYear1");
+            addExperienceItem(experienceHtml, exp, "company2", "jobTitle2", "jobDescription2", "startYear2", "endYear2");
 
             model.put("experienceSection", experienceHtml.toString());
         }
@@ -188,15 +189,19 @@ public class TemplateEngine {
     }
 
     private static void addExperienceItem(StringBuilder html, JSONObject exp,
-                                          String companyKey, String titleKey, String descKey) {
+                                          String companyKey, String titleKey,
+                                          String descKey, String startYearKey, String endYearKey) {
         String company = exp.optString(companyKey, "");
         String title = exp.optString(titleKey, "");
         String description = exp.optString(descKey, "");
+        String startYear = exp.optString(startYearKey, "");
+        String endYear = exp.optString(endYearKey, "");
 
         if (!company.isEmpty()) {
             html.append("<div class=\"timeline-item\">")
                     .append("<div class=\"timeline-header\">")
                     .append("<div class=\"timeline-title\">").append(escapeHtml(company)).append("</div>")
+                    .append("<div class=\"timeline-date\">").append(escapeHtml(startYear)).append(" - ").append(escapeHtml(endYear)).append("</div>")
                     .append("</div>")
                     .append("<div class=\"timeline-subtitle\">").append(escapeHtml(title)).append("</div>")
                     .append("<div class=\"timeline-content\">");

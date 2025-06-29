@@ -1,40 +1,88 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
+        <?import javafx.scene.control.Button?>
+        <?import javafx.scene.control.Label?>
+        <?import javafx.scene.control.ScrollPane?>
+        <?import javafx.scene.control.TextArea?>
+        <?import javafx.scene.control.TextField?>
+        <?import javafx.scene.layout.AnchorPane?>
+        <?import javafx.scene.layout.ColumnConstraints?>
+        <?import javafx.scene.layout.GridPane?>
+        <?import javafx.scene.layout.HBox?>
+        <?import javafx.scene.layout.Priority?>
+        <?import javafx.scene.layout.VBox?>
 
 <AnchorPane minHeight="700.0" minWidth="900.0" prefHeight="700.0" prefWidth="900.0" styleClass="root" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.resumegen.ExperienceController">
-
    <children>
-      <!-- Header -->
-      <Label layoutX="20.0" layoutY="20.0" styleClass="header" text="Work Experience" underline="true" />
+      <VBox layoutX="20.0" layoutY="20.0" prefWidth="860" spacing="15" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0" AnchorPane.bottomAnchor="20.0">
+         <Label styleClass="header" text="Work Experience" underline="true" />
 
-      <!-- Experience 1 Section -->
-      <Label layoutX="20.0" layoutY="70.0" styleClass="subheader" text="1. Work Experience" />
-      <Label layoutX="20.0" layoutY="110.0" styleClass="form-label" text="Company Name" />
-      <TextField fx:id="Company1" layoutX="20.0" layoutY="130.0" prefWidth="400.0" styleClass="text-field" />
-      <Label layoutX="440.0" layoutY="110.0" styleClass="form-label" text="Job Title" />
-      <TextField fx:id="JobTitle1" layoutX="440.0" layoutY="130.0" prefWidth="440.0" styleClass="text-field" />
-      <Label layoutX="20.0" layoutY="170.0" styleClass="form-label" text="Job Description" />
-      <TextArea fx:id="JobDescription1" layoutX="20.0" layoutY="190.0" prefHeight="100.0" prefWidth="860.0" promptText="Describe your responsibilities and achievements" styleClass="text-area" wrapText="true" />
+         <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" style="-fx-background: transparent; -fx-background-color: transparent;" VBox.vgrow="ALWAYS">
+            <content>
+               <VBox styleClass="form-container" spacing="20" prefWidth="820">
+                  <!-- Experience 1 Section -->
+                  <VBox spacing="10">
+                     <Label styleClass="subheader" text="1. Work Experience" />
 
-      <!-- Experience 2 Section -->
-      <Label layoutX="20.0" layoutY="310.0" styleClass="subheader" text="2. Additional Experience" />
-      <Label layoutX="20.0" layoutY="350.0" styleClass="form-label" text="Company Name" />
-      <TextField fx:id="Company2" layoutX="20.0" layoutY="370.0" prefWidth="400.0" styleClass="text-field" />
-      <Label layoutX="440.0" layoutY="350.0" styleClass="form-label" text="Job Title" />
-      <TextField fx:id="JobTitle2" layoutX="440.0" layoutY="370.0" prefWidth="440.0" styleClass="text-field" />
-      <Label layoutX="20.0" layoutY="410.0" styleClass="form-label" text="Job Description" />
-      <TextArea fx:id="JobDescription2" layoutX="20.0" layoutY="430.0" prefHeight="100.0" prefWidth="860.0" promptText="Describe your responsibilities and achievements" styleClass="text-area" wrapText="true" />
+                     <GridPane hgap="15" vgap="10">
+                        <columnConstraints>
+                           <ColumnConstraints percentWidth="50" />
+                           <ColumnConstraints percentWidth="50" />
+                        </columnConstraints>
 
-      <!-- Error Message -->
-      <Label fx:id="label" layoutX="20.0" layoutY="550.0" styleClass="error-label" visible="false" />
+                        <Label styleClass="form-label" text="Company Name" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+                        <Label styleClass="form-label" text="Job Title" GridPane.rowIndex="0" GridPane.columnIndex="1" />
 
-      <!-- Navigation Buttons -->
-      <Button fx:id="Back" layoutX="600.0" layoutY="619.0" mnemonicParsing="false" onAction="#backToSkills" prefWidth="120.0" styleClass="secondary-button" text="Back" />
-      <Button fx:id="NextButton" layoutX="747.0" layoutY="619.0" mnemonicParsing="false" onAction="#nextToLanguages" prefWidth="120.0" styleClass="primary-button" text="Next" />
+                        <TextField fx:id="Company1" prefHeight="35.0" styleClass="text-field" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+                        <TextField fx:id="JobTitle1" prefHeight="35.0" styleClass="text-field" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+
+                        <Label styleClass="form-label" text="Start Year" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+                        <Label styleClass="form-label" text="End Year" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+
+                        <TextField fx:id="StartYear1" prefHeight="35.0" styleClass="text-field" GridPane.rowIndex="3" GridPane.columnIndex="0" />
+                        <TextField fx:id="EndYear1" prefHeight="35.0" styleClass="text-field" GridPane.rowIndex="3" GridPane.columnIndex="1" />
+                     </GridPane>
+
+                     <Label styleClass="form-label" text="Job Description" />
+                     <TextArea fx:id="JobDescription1" prefHeight="80.0" prefWidth="820.0" promptText="Describe your responsibilities and achievements" styleClass="text-area" wrapText="true" />
+                  </VBox>
+
+                  <!-- Experience 2 Section -->
+                  <VBox spacing="10">
+                     <Label styleClass="subheader" text="2. Additional Experience" />
+
+                     <GridPane hgap="15" vgap="10">
+                        <columnConstraints>
+                           <ColumnConstraints percentWidth="50" />
+                           <ColumnConstraints percentWidth="50" />
+                        </columnConstraints>
+
+                        <Label styleClass="form-label" text="Company Name" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+                        <Label styleClass="form-label" text="Job Title" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+
+                        <TextField fx:id="Company2" prefHeight="35.0" styleClass="text-field" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+                        <TextField fx:id="JobTitle2" prefHeight="35.0" styleClass="text-field" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+
+                        <Label styleClass="form-label" text="Start Year" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+                        <Label styleClass="form-label" text="End Year" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+
+                        <TextField fx:id="StartYear2" prefHeight="35.0" styleClass="text-field" GridPane.rowIndex="3" GridPane.columnIndex="0" />
+                        <TextField fx:id="EndYear2" prefHeight="35.0" styleClass="text-field" GridPane.rowIndex="3" GridPane.columnIndex="1" />
+                     </GridPane>
+
+                     <Label styleClass="form-label" text="Job Description" />
+                     <TextArea fx:id="JobDescription2" prefHeight="80.0" prefWidth="820.0" promptText="Describe your responsibilities and achievements" styleClass="text-area" wrapText="true" />
+                  </VBox>
+
+                  <Label fx:id="label" styleClass="error-label" visible="false" />
+               </VBox>
+            </content>
+         </ScrollPane>
+
+         <HBox alignment="BOTTOM_RIGHT" spacing="15" style="-fx-padding: 10 0 0 0;">
+            <Button fx:id="Back" minWidth="120" minHeight="35" mnemonicParsing="false" onAction="#backToSkills" styleClass="secondary-button" text="Back" />
+            <Button fx:id="NextButton" minWidth="120" minHeight="35" mnemonicParsing="false" onAction="#nextToLanguages" styleClass="primary-button" text="Next" />
+         </HBox>
+      </VBox>
    </children>
 </AnchorPane>

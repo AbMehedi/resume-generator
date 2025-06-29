@@ -10,27 +10,29 @@
 
 <AnchorPane minHeight="700.0" minWidth="900.0" prefHeight="700.0" prefWidth="900.0" styleClass="root" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.resumegen.InterestsController">
     <children>
-        <VBox layoutX="20.0" layoutY="20.0" prefWidth="660" spacing="20">
-            <Label styleClass="header" text="Interests" underline="true" />
+        <VBox layoutX="20.0" layoutY="20.0" prefHeight="658.0" prefWidth="860" spacing="20" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+            <Label styleClass="header" text="Interests And Hobbies" underline="true" />
 
-            <VBox spacing="10">
-                <Label styleClass="form-label" text="Add your interests and hobbies:" />
-                <HBox spacing="10.0">
-                    <TextField fx:id="interestField" prefWidth="500.0" promptText="Enter interest" styleClass="text-field" />
-                    <Button fx:id="addButton" mnemonicParsing="false" onAction="#addInterest" styleClass="secondary-button" text="Add" />
-                </HBox>
+            <VBox spacing="20" styleClass="form-container">
+                <VBox spacing="10">
+                    <Label styleClass="form-label" text="Add your interests and hobbies:" />
+                    <HBox alignment="CENTER_LEFT" spacing="10.0">
+                        <TextField fx:id="interestField" prefHeight="40.0" prefWidth="500.0" promptText="Enter interest" styleClass="text-field" />
+                        <Button fx:id="addButton" minWidth="100" mnemonicParsing="false" onAction="#addInterest" styleClass="secondary-button" text="Add" />
+                    </HBox>
+                </VBox>
+
+                <VBox spacing="5">
+                    <Label styleClass="form-label" text="Your Interests:" />
+                    <ListView fx:id="interestsList" prefHeight="200.0" prefWidth="820.0" styleClass="list-view" />
+                </VBox>
+
+                <Label fx:id="errorLabel" styleClass="error-label" visible="false" />
             </VBox>
 
-            <VBox spacing="5">
-                <Label styleClass="form-label" text="Your Interests:" />
-                <ListView fx:id="interestsList" prefHeight="200.0" prefWidth="660.0" styleClass="list-view" />
-            </VBox>
-
-            <Label fx:id="errorLabel" styleClass="error-label" visible="false" />
-
-            <HBox alignment="BOTTOM_RIGHT" prefWidth="660" spacing="20">
-                <Button fx:id="backButton" mnemonicParsing="false" onAction="#backToLanguages" styleClass="secondary-button" text="Back" />
-                <Button fx:id="generateButton" mnemonicParsing="false" onAction="#generateResume" styleClass="primary-button" text="Generate PDF" />
+            <HBox alignment="BOTTOM_RIGHT" prefHeight="143.0" prefWidth="860.0" spacing="20">
+                <Button fx:id="backButton" minWidth="120" mnemonicParsing="false" onAction="#backToLanguages" styleClass="secondary-button" text="Back" />
+                <Button fx:id="generateButton" minWidth="140" mnemonicParsing="false" onAction="#generateResume" styleClass="primary-button" text="Generate PDF" />
             </HBox>
         </VBox>
     </children>

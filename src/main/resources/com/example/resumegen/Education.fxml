@@ -1,66 +1,73 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+        <?import javafx.scene.control.Button?>
+        <?import javafx.scene.control.Label?>
+        <?import javafx.scene.control.TextField?>
+        <?import javafx.scene.layout.AnchorPane?>
+        <?import javafx.scene.layout.ColumnConstraints?>
+        <?import javafx.scene.layout.GridPane?>
+        <?import javafx.scene.layout.HBox?>
+        <?import javafx.scene.layout.RowConstraints?>
+        <?import javafx.scene.layout.VBox?>
 
 <AnchorPane minHeight="700.0" minWidth="900.0" prefHeight="700.0" prefWidth="900.0" styleClass="root" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.resumegen.EducationController">
    <children>
-      <Label layoutX="20.0" layoutY="20.0" styleClass="header" text="Educational Qualification" underline="true" />
+      <VBox layoutX="20.0" layoutY="20.0" prefWidth="860" spacing="20" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+         <Label styleClass="header" text="Educational Qualification" underline="true" />
 
-      <VBox layoutX="20.0" layoutY="60.0" prefWidth="660" spacing="20">
-         <!-- College Section -->
-         <VBox spacing="10">
-            <Label styleClass="subheader" text="1. College/University Education" />
-            <Label styleClass="form-label" text="College/ University Name" />
-            <TextField fx:id="CollegeName" prefHeight="35.0" prefWidth="660.0" styleClass="text-field" />
+         <VBox styleClass="form-container" spacing="20">
+            <!-- College Section -->
+            <VBox spacing="10">
+               <Label styleClass="subheader" text="1. College/University Education" />
+               <Label styleClass="form-label" text="College/University Name" />
+               <TextField fx:id="CollegeName" prefHeight="40.0" prefWidth="820.0" styleClass="text-field" />
 
-            <HBox spacing="20">
-               <VBox prefWidth="200" spacing="5">
-                  <Label styleClass="form-label" text="Name of Degree" />
-                  <TextField fx:id="College_Degree" prefHeight="35.0" styleClass="text-field" />
-               </VBox>
-               <VBox prefWidth="150" spacing="5">
-                  <Label styleClass="form-label" text="Passing Year" />
-                  <TextField fx:id="College_PassingYear" prefHeight="35.0" styleClass="text-field" />
-               </VBox>
-               <VBox prefWidth="150" spacing="5">
-                  <Label styleClass="form-label" text="CGPA" />
-                  <TextField fx:id="College_CGPA" prefHeight="35.0" styleClass="text-field" />
-               </VBox>
-            </HBox>
+               <GridPane hgap="20" vgap="10">
+                  <columnConstraints>
+                     <ColumnConstraints percentWidth="40" />
+                     <ColumnConstraints percentWidth="30" />
+                     <ColumnConstraints percentWidth="30" />
+                  </columnConstraints>
+
+                  <Label styleClass="form-label" text="Name of Degree" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+                  <Label styleClass="form-label" text="Passing Year" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+                  <Label styleClass="form-label" text="CGPA" GridPane.rowIndex="0" GridPane.columnIndex="2" />
+
+                  <TextField fx:id="College_Degree" prefHeight="40.0" styleClass="text-field" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+                  <TextField fx:id="College_PassingYear" prefHeight="40.0" styleClass="text-field" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+                  <TextField fx:id="College_CGPA" prefHeight="40.0" styleClass="text-field" GridPane.rowIndex="1" GridPane.columnIndex="2" />
+               </GridPane>
+            </VBox>
+
+            <!-- University Section -->
+            <VBox spacing="10">
+               <Label styleClass="subheader" text="2. Additional Education" />
+               <Label styleClass="form-label" text="College/University Name" />
+               <TextField fx:id="University_Name" prefHeight="40.0" prefWidth="820.0" styleClass="text-field" />
+
+               <GridPane hgap="20" vgap="10">
+                  <columnConstraints>
+                     <ColumnConstraints percentWidth="40" />
+                     <ColumnConstraints percentWidth="30" />
+                     <ColumnConstraints percentWidth="30" />
+                  </columnConstraints>
+
+                  <Label styleClass="form-label" text="Name of Degree" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+                  <Label styleClass="form-label" text="Passing Year" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+                  <Label styleClass="form-label" text="CGPA" GridPane.rowIndex="0" GridPane.columnIndex="2" />
+
+                  <TextField fx:id="University_Degree" prefHeight="40.0" styleClass="text-field" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+                  <TextField fx:id="University_PassingYear" prefHeight="40.0" styleClass="text-field" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+                  <TextField fx:id="University_CGPA" prefHeight="40.0" styleClass="text-field" GridPane.rowIndex="1" GridPane.columnIndex="2" />
+               </GridPane>
+            </VBox>
+
+            <Label fx:id="label" styleClass="error-label" visible="false" />
          </VBox>
 
-         <!-- University Section -->
-         <VBox spacing="10">
-            <Label styleClass="subheader" text="2. Additional Education" />
-            <Label styleClass="form-label" text="College/ University Name" />
-            <TextField fx:id="University_Name" prefHeight="35.0" prefWidth="660.0" styleClass="text-field" />
-
-            <HBox spacing="20">
-               <VBox prefWidth="200" spacing="5">
-                  <Label styleClass="form-label" text="Name of Degree" />
-                  <TextField fx:id="University_Degree" prefHeight="35.0" styleClass="text-field" />
-               </VBox>
-               <VBox prefWidth="150" spacing="5">
-                  <Label styleClass="form-label" text="Passing Year" />
-                  <TextField fx:id="University_PassingYear" prefHeight="35.0" styleClass="text-field" />
-               </VBox>
-               <VBox prefWidth="150" spacing="5">
-                  <Label styleClass="form-label" text="CGPA" />
-                  <TextField fx:id="University_CGPA" prefHeight="35.0" styleClass="text-field" />
-               </VBox>
-            </HBox>
-         </VBox>
-
-         <Label fx:id="label" styleClass="error-label" visible="false" />
-
-         <HBox alignment="BOTTOM_RIGHT" prefWidth="660" spacing="20">
-            <Button fx:id="Back" mnemonicParsing="false" onAction="#backToPersonalInfo" styleClass="secondary-button" text="Back" />
-            <Button fx:id="SaveAndContinue" mnemonicParsing="false" onAction="#navigateToSkillsPage" styleClass="primary-button" text="Save And Continue" />
+         <HBox alignment="BOTTOM_RIGHT" spacing="20">
+            <Button fx:id="Back" minWidth="120" mnemonicParsing="false" onAction="#backToPersonalInfo" styleClass="secondary-button" text="Back" />
+            <Button fx:id="SaveAndContinue" minWidth="160" mnemonicParsing="false" onAction="#navigateToSkillsPage" styleClass="primary-button" text="Save And Continue" />
          </HBox>
       </VBox>
    </children>
