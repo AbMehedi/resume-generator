@@ -127,74 +127,51 @@ public class InterestsController {
     @FXML
     public void generateResume() {
         saveInterests();
-
-        // Disable button during generation
         generateButton.setDisable(true);
 
         Task<Void> generationTask = new Task<>() {
+            private ResumeGenerator resumeGenerator;
+
             @Override
             protected Void call() throws Exception {
-                // Use the ResumeGenerator class to handle generation and email sending
-                ResumeGenerator resumeGenerator = new ResumeGenerator(username);
-                resumeGenerator.generateAndSend();
-
-                updateMessage(
-                        resumeGenerator.getHtmlPath() + "|" +
-                                resumeGenerator.getPdfPath() + "|" +
-                                resumeGenerator.getUserEmail()
-                );
+                resumeGenerator = new ResumeGenerator(username);
+                // Generate and open PDF first
+                resumeGenerator.generateAndOpen();
                 return null;
             }
-        };
 
-        generationTask.setOnSucceeded(e -> {
-            String[] parts = generationTask.getMessage().split("\\|");
-            String htmlPath = parts[0];
-            String pdfPath = parts[1];
-            String userEmail = parts[2];
+            @Override
+            protected void succeeded() {
+                // Send email in background after PDF is opened
+                new Thread(() -> {
+                    resumeGenerator.sendEmail();
+                    Platform.runLater(() -> {
+                        String successMessage = "HTML version saved to: " + resumeGenerator.getHtmlPath() + "\n" +
+                                "PDF version saved to: " + resumeGenerator.getPdfPath();
 
-            try {
-                // Check if the PDF was generated successfully
-                File pdfFile = new File(pdfPath);
-                if (pdfFile.exists() && pdfFile.isFile()) {
-                    // Open the PDF automatically
-                    if (Desktop.isDesktopSupported()) {
-                        Desktop.getDesktop().open(pdfFile);
-                    }
+                        if (!resumeGenerator.getUserEmail().isEmpty()) {
+                            successMessage += "\nEmail sent to: " + resumeGenerator.getUserEmail();
+                        }
 
-                    // Show success message
-                    String successMessage = "HTML version saved to: " + htmlPath + "\n" +
-                            "PDF version saved to: " + pdfPath;
-
-                    if (!userEmail.isEmpty()) {
-                        successMessage = "Resume has been sent to " + userEmail + "\n" + successMessage;
-                    }
-
-                    showSuccessAlert("Resume Generated", successMessage);
-                } else {
-                    // Handle the case where the PDF wasn't generated correctly
-                    showError("Error: PDF generation failed. The file doesn't exist.");
-                }
-            } catch (Exception ex) {
-                showError("Error opening PDF: " + ex.getMessage());
-            } finally {
-                generateButton.setDisable(false);
+                        showSuccessAlert("Resume Generated", successMessage);
+                        generateButton.setDisable(false);
+                    });
+                }).start();
             }
-        });
 
-        generationTask.setOnFailed(e -> {
-            generateButton.setDisable(false);
-            Throwable ex = generationTask.getException();
-            showError("Resume Generation Failed: " + ex.getMessage());
-            ex.printStackTrace();
-        });
+            @Override
+            protected void failed() {
+                Platform.runLater(() -> {
+                    generateButton.setDisable(false);
+                    showError("Resume Generation Failed: " + getException().getMessage());
+                });
+            }
+        };
 
         new Thread(generationTask).start();
     }
 
-    // Modified showError method to ensure thread safety with Platform.runLater
     private void showError(String message) {
-        // Use Platform.runLater to ensure the UI update happens on the JavaFX Application Thread
         Platform.runLater(() -> {
             errorLabel.setText(message);
             errorLabel.setVisible(true);
@@ -202,7 +179,6 @@ public class InterestsController {
     }
 
     private void showSuccessAlert(String title, String message) {
-        // Use Platform.runLater for thread safety for success alert too
         Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle(title);

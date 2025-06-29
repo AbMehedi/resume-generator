@@ -1,5 +1,8 @@
 package com.example.resumegen;
 
+import javafx.application.Platform;
+import java.awt.Desktop;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -15,48 +18,53 @@ public class ResumeGenerator {
         this.username = username;
     }
 
-    public void generateAndSend() throws Exception {
-        // 1. Load resume data
+    public void generateAndOpen() throws Exception {
         JSONObject resume = ResumeService.loadResume(username);
 
-        // 2. Get user email from personal info
         if (resume.has("personal")) {
             JSONObject personal = resume.getJSONObject("personal");
             userEmail = personal.optString("email", "");
         }
 
-        // 3. Generate HTML
         String html = TemplateEngine.generateResume(resume);
-
-        // 4. Save HTML to file
         htmlPath = HtmlSaver.saveHtml(html, username);
-
-        // 5. Generate PDF path
         pdfPath = htmlPath.replace(".html", ".pdf");
 
-        // 6. Generate PDF
         PdfGenerator.generatePdf(htmlPath, pdfPath);
 
-        // 7. Send email if email exists
+        // Open PDF immediately after generation
+        openPdfFile();
+    }
+
+    public void sendEmail() {
         if (!userEmail.isEmpty()) {
-            EmailSender.sendEmailWithAttachment(
-                    userEmail,
-                    "Your Generated Resume",
-                    "Please find your resume attached.",
-                    Paths.get(pdfPath)
-            );
+            try {
+                EmailSender.sendEmailWithAttachment(
+                        userEmail,
+                        "Your Generated Resume",
+                        "Please find your resume attached.",
+                        Paths.get(pdfPath)
+                );
+            } catch (IOException e) {
+                System.err.println("Email sending failed: " + e.getMessage());
+            }
         }
     }
 
-    public String getHtmlPath() {
-        return htmlPath;
+    private void openPdfFile() {
+        File pdfFile = new File(pdfPath);
+        if (pdfFile.exists() && Desktop.isDesktopSupported()) {
+            Platform.runLater(() -> {
+                try {
+                    Desktop.getDesktop().open(pdfFile);
+                } catch (IOException e) {
+                    System.err.println("Error opening PDF: " + e.getMessage());
+                }
+            });
+        }
     }
 
-    public String getPdfPath() {
-        return pdfPath;
-    }
-
-    public String getUserEmail() {
-        return userEmail;
-    }
+    public String getHtmlPath() { return htmlPath; }
+    public String getPdfPath() { return pdfPath; }
+    public String getUserEmail() { return userEmail; }
 }
