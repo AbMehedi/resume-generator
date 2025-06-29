@@ -14,6 +14,7 @@ public class EmailSender {
     private static final String USERNAME = "resumebuilderbeta@gmail.com"; // Replace with your email
     private static final String PASSWORD = "itieijczisaxkmem";   // Replace with your app password
 
+
     public static void sendEmailWithAttachment(
             String recipient,
             String subject,
@@ -209,3 +210,5 @@ public class EmailSender {
         }
     }
 }
+
+//  -Djavax.net.ssl.trustStoreType=WINDOWS-ROOT -Djavax.net.ssl.trustStore=NONE
