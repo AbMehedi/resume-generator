@@ -18,20 +18,34 @@
       <TextField fx:id="Company1" layoutX="20.0" layoutY="130.0" prefWidth="400.0" styleClass="text-field" />
       <Label layoutX="440.0" layoutY="110.0" styleClass="form-label" text="Job Title" />
       <TextField fx:id="JobTitle1" layoutX="440.0" layoutY="130.0" prefWidth="440.0" styleClass="text-field" />
-      <Label layoutX="20.0" layoutY="170.0" styleClass="form-label" text="Job Description" />
-      <TextArea fx:id="JobDescription1" layoutX="20.0" layoutY="190.0" prefHeight="100.0" prefWidth="860.0" promptText="Describe your responsibilities and achievements" styleClass="text-area" wrapText="true" />
+
+      <!-- New Duration Fields -->
+      <Label layoutX="20.0" layoutY="170.0" styleClass="form-label" text="Start Year" />
+      <TextField fx:id="StartYear1" layoutX="20.0" layoutY="190.0" prefWidth="190.0" styleClass="text-field" />
+      <Label layoutX="230.0" layoutY="170.0" styleClass="form-label" text="End Year" />
+      <TextField fx:id="EndYear1" layoutX="230.0" layoutY="190.0" prefWidth="190.0" styleClass="text-field" />
+
+      <Label layoutX="20.0" layoutY="230.0" styleClass="form-label" text="Job Description" />
+      <TextArea fx:id="JobDescription1" layoutX="20.0" layoutY="250.0" prefHeight="100.0" prefWidth="860.0" promptText="Describe your responsibilities and achievements" styleClass="text-area" wrapText="true" />
 
       <!-- Experience 2 Section -->
-      <Label layoutX="20.0" layoutY="310.0" styleClass="subheader" text="2. Additional Experience" />
-      <Label layoutX="20.0" layoutY="350.0" styleClass="form-label" text="Company Name" />
-      <TextField fx:id="Company2" layoutX="20.0" layoutY="370.0" prefWidth="400.0" styleClass="text-field" />
-      <Label layoutX="440.0" layoutY="350.0" styleClass="form-label" text="Job Title" />
-      <TextField fx:id="JobTitle2" layoutX="440.0" layoutY="370.0" prefWidth="440.0" styleClass="text-field" />
-      <Label layoutX="20.0" layoutY="410.0" styleClass="form-label" text="Job Description" />
-      <TextArea fx:id="JobDescription2" layoutX="20.0" layoutY="430.0" prefHeight="100.0" prefWidth="860.0" promptText="Describe your responsibilities and achievements" styleClass="text-area" wrapText="true" />
+      <Label layoutX="20.0" layoutY="370.0" styleClass="subheader" text="2. Additional Experience" />
+      <Label layoutX="20.0" layoutY="410.0" styleClass="form-label" text="Company Name" />
+      <TextField fx:id="Company2" layoutX="20.0" layoutY="430.0" prefWidth="400.0" styleClass="text-field" />
+      <Label layoutX="440.0" layoutY="410.0" styleClass="form-label" text="Job Title" />
+      <TextField fx:id="JobTitle2" layoutX="440.0" layoutY="430.0" prefWidth="440.0" styleClass="text-field" />
+
+      <!-- New Duration Fields -->
+      <Label layoutX="20.0" layoutY="470.0" styleClass="form-label" text="Start Year" />
+      <TextField fx:id="StartYear2" layoutX="20.0" layoutY="490.0" prefWidth="190.0" styleClass="text-field" />
+      <Label layoutX="230.0" layoutY="470.0" styleClass="form-label" text="End Year" />
+      <TextField fx:id="EndYear2" layoutX="230.0" layoutY="490.0" prefWidth="190.0" styleClass="text-field" />
+
+      <Label layoutX="20.0" layoutY="530.0" styleClass="form-label" text="Job Description" />
+      <TextArea fx:id="JobDescription2" layoutX="20.0" layoutY="550.0" prefHeight="100.0" prefWidth="860.0" promptText="Describe your responsibilities and achievements" styleClass="text-area" wrapText="true" />
 
       <!-- Error Message -->
-      <Label fx:id="label" layoutX="20.0" layoutY="550.0" styleClass="error-label" visible="false" />
+      <Label fx:id="label" layoutX="20.0" layoutY="670.0" styleClass="error-label" visible="false" />
 
       <!-- Navigation Buttons -->
       <Button fx:id="Back" layoutX="600.0" layoutY="619.0" mnemonicParsing="false" onAction="#backToSkills" prefWidth="120.0" styleClass="secondary-button" text="Back" />

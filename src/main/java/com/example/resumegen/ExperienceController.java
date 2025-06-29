@@ -23,9 +23,15 @@ public class ExperienceController {
     @FXML private TextField Company1;
     @FXML private TextField JobTitle1;
     @FXML private TextArea JobDescription1;
+    @FXML private TextField StartYear1;
+    @FXML private TextField EndYear1;
+
     @FXML private TextField Company2;
     @FXML private TextField JobTitle2;
     @FXML private TextArea JobDescription2;
+    @FXML private TextField StartYear2;
+    @FXML private TextField EndYear2;
+
     @FXML private Button NextButton;
     @FXML private Button Back;
     @FXML private Label label;
@@ -45,6 +51,12 @@ public class ExperienceController {
         configureCapitalization(Company2);
         configureCapitalization(JobTitle2);
 
+        // Configure year validation
+        configureYearValidation(StartYear1);
+        configureYearValidation(EndYear1);
+        configureYearValidation(StartYear2);
+        configureYearValidation(EndYear2);
+
         // Configure sentence capitalization for job descriptions
         configureSentenceCapitalization(JobDescription1);
         configureSentenceCapitalization(JobDescription2);
@@ -63,6 +75,16 @@ public class ExperienceController {
                 }
             }
             return change;
+        }));
+    }
+
+    private void configureYearValidation(TextField field) {
+        field.setTextFormatter(new TextFormatter<>(change -> {
+            String newText = change.getControlNewText();
+            if (newText.matches("\\d{0,4}")) {
+                return change;
+            }
+            return null;
         }));
     }
 
@@ -98,9 +120,14 @@ public class ExperienceController {
                 Company1.setText(exp.optString("company1", ""));
                 JobTitle1.setText(exp.optString("jobTitle1", ""));
                 JobDescription1.setText(exp.optString("jobDescription1", ""));
+                StartYear1.setText(exp.optString("startYear1", ""));
+                EndYear1.setText(exp.optString("endYear1", ""));
+
                 Company2.setText(exp.optString("company2", ""));
                 JobTitle2.setText(exp.optString("jobTitle2", ""));
                 JobDescription2.setText(exp.optString("jobDescription2", ""));
+                StartYear2.setText(exp.optString("startYear2", ""));
+                EndYear2.setText(exp.optString("endYear2", ""));
             }
         } catch (Exception e) {
             showError("Error loading experience data: " + e.getMessage());
@@ -139,6 +166,18 @@ public class ExperienceController {
                 showError("Job description is required for company 1");
                 return false;
             }
+            if (StartYear1.getText().isBlank() || EndYear1.getText().isBlank()) {
+                showError("Start and end years are required for company 1");
+                return false;
+            }
+            if (!isValidYear(StartYear1.getText()) || !isValidYear(EndYear1.getText())) {
+                showError("Please enter valid 4-digit years (e.g., 2020) for company 1");
+                return false;
+            }
+            if (Integer.parseInt(StartYear1.getText()) > Integer.parseInt(EndYear1.getText())) {
+                showError("Start year must be before end year for company 1");
+                return false;
+            }
         }
 
         // Validate company 2 fields
@@ -151,6 +190,18 @@ public class ExperienceController {
                 showError("Job description is required for company 2");
                 return false;
             }
+            if (StartYear2.getText().isBlank() || EndYear2.getText().isBlank()) {
+                showError("Start and end years are required for company 2");
+                return false;
+            }
+            if (!isValidYear(StartYear2.getText()) || !isValidYear(EndYear2.getText())) {
+                showError("Please enter valid 4-digit years (e.g., 2020) for company 2");
+                return false;
+            }
+            if (Integer.parseInt(StartYear2.getText()) > Integer.parseInt(EndYear2.getText())) {
+                showError("Start year must be before end year for company 2");
+                return false;
+            }
         }
 
         // At least one experience entry is required
@@ -158,8 +209,22 @@ public class ExperienceController {
             showError("At least one work experience entry is required");
             return false;
         }
+        // Validate about JobDescription1
+        if (!JobDescription1.getText().isBlank() && JobDescription1.getText().trim().length() < 30) {
+            showError("Job description for company 1 should be at least 30 characters");
+            return false;
+        }
+        // Validate about JobDescription2
+        if (!JobDescription2.getText().isBlank() && JobDescription2.getText().trim().length() < 30) {
+            showError("Job description for company 2 should be at least 30 characters");
+            return false;
+        }
 
         return true;
+    }
+
+    private boolean isValidYear(String year) {
+        return year.matches("\\d{4}");
     }
 
     private void saveExperience() {
@@ -169,9 +234,14 @@ public class ExperienceController {
         experience.put("company1", Company1.getText().trim());
         experience.put("jobTitle1", JobTitle1.getText().trim());
         experience.put("jobDescription1", JobDescription1.getText().trim());
+        experience.put("startYear1", StartYear1.getText().trim());
+        experience.put("endYear1", EndYear1.getText().trim());
+
         experience.put("company2", Company2.getText().trim());
         experience.put("jobTitle2", JobTitle2.getText().trim());
         experience.put("jobDescription2", JobDescription2.getText().trim());
+        experience.put("startYear2", StartYear2.getText().trim());
+        experience.put("endYear2", EndYear2.getText().trim());
 
         resume.put("experience", experience);
         ResumeService.saveResume(username, resume);

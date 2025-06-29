@@ -200,8 +200,8 @@ public class Personal_InfoController {
         }
 
         // Validate about me
-        if (AboutMe.getText().trim().length() < 50) {
-            showError("About Me should be at least 50 characters");
+        if (AboutMe.getText().trim().length() < 30) {
+            showError("About Me should be at least 30 characters");
             return false;
         }
 
